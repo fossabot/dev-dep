@@ -1,0 +1,16 @@
+{
+  "IMPORT": [ "../__base__", "../babel" ],
+  "INSTALL": [ "config/" ],
+  "scripts": {
+    "example": "cross-env NODE_ENV=production webpack --config config/example.conf.js",
+    "example-dev": "cross-env NODE_ENV=development webpack --watch --config config/example.conf.js",
+    "library": "cross-env NODE_ENV=production webpack --config config/library.conf.js",
+    "library-dev": "cross-env NODE_ENV=development webpack --watch --config config/library.conf.js",
+    "perf-webpack-stats": "cross-env NODE_ENV=production webpack --config config/library.conf.js --json > stats.json",
+    "perf-webpack-profile": "cross-env NODE_ENV=production webpack --config config/library.conf.js --profile"
+  },
+  "dependencies": {
+    "babel-loader": "^7.1.2",
+    "webpack": "^3.5.5"
+  }
+}

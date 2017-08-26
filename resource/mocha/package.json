@@ -1,0 +1,11 @@
+{
+  "IMPORT": [ "../babel" ],
+  "scripts": {
+    "test": "npm run test-mocha",
+    "test-mocha": "mocha --compilers js:babel-register \"source/**/*.test.js\""
+  },
+  "dependencies": {
+    "babel-register": "^6.26.0",
+    "mocha": "^3.5.0"
+  }
+}

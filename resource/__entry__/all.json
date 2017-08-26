@@ -1,0 +1,7 @@
+{
+  "IMPORT": [ "../webpack", "../babel", "../eslint", "../mocha" ],
+  "EXPORT": [ "README.md" ],
+  "name": "dev-dep-web",
+  "version": "0.0.1",
+  "description": "W · E · B = Webpack + ESLint + Babel"
+}

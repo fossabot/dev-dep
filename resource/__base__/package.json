@@ -1,0 +1,26 @@
+{
+  "EXPORT": [ ".npmignore", "README.md" ],
+  "INSTALL": [ "dot.gitignore", "dot.npmignore", "README.md" ],
+  "author": "dr-js",
+  "license": "MIT",
+  "keywords": [
+    "Dr",
+    "Dr-js",
+    "JavaScript"
+  ],
+  "homepage": "https://github.com/dr-js/dev-dependency-pack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dr-js/dev-dependency-pack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dr-js/dev-dependency-pack/issues"
+  },
+  "engines": {
+    "node": "8.x",
+    "npm": "5.x"
+  },
+  "dependencies": {
+    "cross-env": "^5.0.5"
+  }
+}
