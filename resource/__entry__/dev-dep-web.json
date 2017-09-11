@@ -1,5 +1,11 @@
 {
-  "IMPORT": [ "../webpack", "../babel", "../eslint", "../mocha" ],
+  "IMPORT": [
+    "../__base__",
+    "../mocha",
+    "../babel",
+    "../eslint",
+    "../webpack"
+  ],
   "EXPORT": [ "README.md" ],
   "name": "dev-dep-web",
   "version": "0.0.1",
