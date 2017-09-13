@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "babel-register": "^6.26.0",
-    "mocha": "^3.5.0"
+    "mocha": "^3.5.3"
   }
 }

@@ -8,6 +8,6 @@
   ],
   "EXPORT": [ "README.md" ],
   "name": "dev-dep-web-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "W · E · B = Webpack + ESLint + Babel"
 }
