@@ -33,7 +33,7 @@ module.exports = {
       test: /\.pcss$/,
       use: ExtractTextPlugin.extract({ use: [ { loader: 'css-loader', options: OPTIONS.CSS_LOADER }, { loader: 'postcss-loader', options: OPTIONS.POSTCSS_LOADER } ] })
     }, {
-      exclude: [ /\.js$/, /\.pcss$/ ],
+      exclude: [ /\.js$/, /\.json$/, /\.pcss$/ ],
       use: [ { loader: 'file-loader', options: { name: IS_PRODUCTION ? 'static/media/[name].[hash].[ext]' : 'static/media/[name].[ext]' } } ]
     } ]
   },

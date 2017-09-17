@@ -2,12 +2,11 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
-    "../babel-react",
-    "../eslint-react",
-    "../webpack-react"
+    "../eslint/[react]",
+    "../webpack/[react]"
   ],
   "EXPORT": [ "README.md" ],
   "name": "dev-dep-web-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "W · E · B = Webpack + ESLint + Babel"
 }
