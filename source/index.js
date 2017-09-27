@@ -35,8 +35,8 @@ const main = async () => {
   __DEV__ && console.log('processOptionMap PASS')
 
   const mode = getSingleOption('mode')
-  if (mode === 'check-outdated') return checkOutdated()
-  if (mode === 'pack') {
+  if (mode === 'check-outdated' || mode === 'co') return checkOutdated()
+  if (mode === 'pack' || mode === 'p') {
     const pathEntry = getSingleOption('path-entry')
     const pathOutput = getSingleOption('path-output')
     const pathOutputInstall = nodeModulePath.resolve(pathOutput, 'install')

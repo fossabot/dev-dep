@@ -16,8 +16,8 @@ const OPTION_CONFIG = {
   }, {
     name: 'mode',
     shortName: 'm',
-    description: `should be 'pack' or 'check-outdated'`,
-    ...OPTION_CONFIG_PRESET.OneOfString([ 'pack', 'check-outdated' ]),
+    description: `should be 'pack', 'check-outdated' or 'p', 'co' in short`,
+    ...OPTION_CONFIG_PRESET.OneOfString([ 'pack', 'check-outdated', 'p', 'co' ]),
     extendFormatList: [
       { name: 'path-entry', shortName: 'e', optional: checkModePackOption, description: `starting path to 'package.json', or directory with 'package.json' inside`, ...OPTION_CONFIG_PRESET.SingleString, isPath: true },
       { name: 'path-output', shortName: 'o', optional: checkModePackOption, description: `output path`, ...OPTION_CONFIG_PRESET.SingleString, isPath: true },

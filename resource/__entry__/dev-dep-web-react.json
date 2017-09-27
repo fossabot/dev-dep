@@ -5,8 +5,5 @@
     "../eslint/[react]",
     "../webpack/[react]"
   ],
-  "EXPORT": [ "README.md" ],
-  "name": "dev-dep-web-react",
-  "version": "0.0.3",
-  "description": "W · E · B = Webpack + ESLint + Babel"
+  "EXPORT": [ "README.md" ]
 }

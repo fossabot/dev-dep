@@ -5,7 +5,7 @@
     "test-mocha": "mocha --compilers js:babel-register \"source/**/*.test.js\""
   },
   "dependencies": {
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.1",
     "babel-register": "^6.26.0"
   }
 }

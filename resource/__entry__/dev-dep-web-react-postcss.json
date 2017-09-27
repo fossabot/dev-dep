@@ -2,8 +2,8 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
-    "../eslint",
-    "../webpack/[dev]"
+    "../eslint/[react]",
+    "../webpack/[react]/[postcss]"
   ],
   "EXPORT": [ "README.md" ]
 }
