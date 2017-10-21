@@ -21,6 +21,6 @@
     "npm": "5.x"
   },
   "dependencies": {
-    "cross-env": "^5.0.5"
+    "cross-env": "^5.1.0"
   }
 }

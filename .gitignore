@@ -9,6 +9,5 @@ node_modules
 .idea
 
 # distribute file
-/example
 /library
 /*.tgz

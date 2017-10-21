@@ -10,7 +10,11 @@ const NODE_ENV = process.env.NODE_ENV
 const IS_PRODUCTION = NODE_ENV === 'production'
 
 const OPTIONS = {
-  BABEL_LOADER: { presets: IS_PRODUCTION ? [ [ 'es2015', { modules: false } ], 'stage-0', 'react' ] : [ 'stage-0', 'react' ] },
+  BABEL_LOADER: {
+    babelrc: false,
+    presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], 'react' ],
+    plugins: [ 'transform-class-properties', [ 'transform-object-rest-spread', { useBuiltIns: true } ] ]
+  },
   CSS_LOADER: { localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' }
 }
 module.exports = {
@@ -20,17 +24,10 @@ module.exports = {
   },
   resolve: { alias: { pack: nodeModulePath.resolve(__dirname, '..') } },
   module: {
-    rules: [ {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: [ { loader: 'babel-loader', options: OPTIONS.BABEL_LOADER } ]
-    }, {
-      test: /\.pcss$/,
-      use: ExtractTextPlugin.extract({ use: [ { loader: 'css-loader', options: OPTIONS.CSS_LOADER } ] })
-    }, {
-      exclude: [ /\.js$/, /\.json$/, /\.pcss$/ ],
-      use: [ { loader: 'file-loader', options: { name: IS_PRODUCTION ? 'static/media/[name].[hash].[ext]' : 'static/media/[name].[ext]' } } ]
-    } ]
+    rules: [
+      { test: /\.js$/, exclude: /node_modules/, use: [ { loader: 'babel-loader', options: OPTIONS.BABEL_LOADER } ] },
+      { test: /\.pcss$/, use: ExtractTextPlugin.extract({ use: [ { loader: 'css-loader', options: OPTIONS.CSS_LOADER } ] }) }
+    ]
   },
   plugins: [
     new ExtractTextPlugin(IS_PRODUCTION ? '[name].[contenthash:8].css' : '[name].css'),

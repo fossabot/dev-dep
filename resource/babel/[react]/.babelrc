@@ -1,4 +1,8 @@
 {
-  "presets": [ [ "es2015", { "modules": false } ], "stage-0", "react" ],
-  "plugins": [ [ "module-resolver", { "root": [ "./" ] } ] ]
+  "presets": [ [ "env", { "targets": ">= 5%", "modules": false } ], "react" ],
+  "plugins": [
+    "transform-class-properties",
+    [ "transform-object-rest-spread", { "useBuiltIns": true } ],
+    [ "module-resolver", { "root": [ "./" ] } ]
+  ]
 }

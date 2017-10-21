@@ -2,7 +2,7 @@
   "IMPORT": [ "../babel/[dev]" ],
   "scripts": {
     "test": "npm run test-mocha",
-    "test-mocha": "mocha --compilers js:babel-register \"source/**/*.test.js\""
+    "test-mocha": "mocha --require babel-register \"source/**/*.test.js\""
   },
   "dependencies": {
     "mocha": "^4.0.1",
