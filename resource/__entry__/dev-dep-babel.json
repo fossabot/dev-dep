@@ -1,0 +1,8 @@
+{
+  "IMPORT": [
+    "../__base__",
+    "../mocha",
+    "../eslint"
+  ],
+  "EXPORT": [ "README.md" ]
+}
