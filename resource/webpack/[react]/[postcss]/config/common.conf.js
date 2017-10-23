@@ -10,7 +10,11 @@ const NODE_ENV = process.env.NODE_ENV
 const IS_PRODUCTION = NODE_ENV === 'production'
 
 const OPTIONS = {
-  BABEL_LOADER: { presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], 'react' ] },
+  BABEL_LOADER: {
+    babelrc: false,
+    presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], 'react' ],
+    plugins: [ 'transform-class-properties', [ 'transform-object-rest-spread', { useBuiltIns: true } ] ]
+  },
   CSS_LOADER: { importLoaders: 1, localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' },
   POSTCSS_LOADER: { plugins: () => [ require('postcss-cssnext') ] }
 }
