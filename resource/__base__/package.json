@@ -17,10 +17,10 @@
     "url": "https://github.com/dr-js/dev-dependency-pack/issues"
   },
   "engines": {
-    "node": "8.x",
-    "npm": "5.x"
+    "node": ">=8.3.0",
+    "npm": ">=5.4.0"
   },
   "dependencies": {
-    "cross-env": "^5.1.0"
+    "cross-env": "^5.1.1"
   }
 }
