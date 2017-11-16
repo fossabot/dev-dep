@@ -1,6 +1,8 @@
 # source files
+**/*-gitignore/**
 /.*
 /*.tgz
+/*.lock
 /config
 /source
 /example

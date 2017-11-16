@@ -10,7 +10,7 @@ const readFileAsync = promisify(nodeModuleFs.readFile)
 const writeFileAsync = promisify(nodeModuleFs.writeFile)
 
 const PATH_RESOURCE = nodeModulePath.resolve(__dirname, '../resource')
-const PATH_TEMP = nodeModulePath.resolve(__dirname, '../temp-outdated-check')
+const PATH_TEMP = nodeModulePath.resolve(__dirname, '../check-outdated-gitignore')
 const REGEXP_OUTDATED_OUTPUT = /(\S+)\s+MISSING\s+\S+\s+(\S+)\s+\S+/
 
 // check
@@ -57,7 +57,7 @@ const checkOutdated = async () => {
   await createDirectory(PATH_TEMP)
   await writeFileAsync(nodeModulePath.join(PATH_TEMP, 'package.json'), JSON.stringify({
     private: true,
-    name: 'temp-outdated-check',
+    name: 'check-outdated',
     version: '0.0.0',
     author: 'dr-js',
     license: 'MIT',
@@ -88,13 +88,14 @@ const checkOutdated = async () => {
     else outdatedList.push({ name, source, version, versionLatest })
   })
 
-  outdatedList.length && console.warn('OUTDATED:')
+  const total = outdatedList.length + sameList.length
+  outdatedList.length && console.warn(`OUTDATED[${outdatedList.length}/${total}]:`)
   outdatedList.forEach(({ name, source, version, versionLatest }) => console.warn(`${name.padStart(lengthMax.name)} | ${version.padStart(lengthMax.version)} => ${versionLatest.padEnd(lengthMax.versionLatest)} | ${source}`))
-
-  sameList.length && console.warn('SAME:')
+  sameList.length && console.warn(`SAME[${sameList.length}/${total}]:`)
   sameList.forEach(({ name, source, version, versionLatest }) => console.log(`${name.padStart(lengthMax.name)} | ${version.padStart(lengthMax.version)} == ${versionLatest.padEnd(lengthMax.versionLatest)} | ${source}`))
 
   await modify.delete(PATH_TEMP)
+  process.exit(outdatedList.length)
 }
 
 export { checkOutdated }

@@ -9,5 +9,6 @@ node_modules
 .idea
 
 # distribute file
-/library
+**/*-gitignore/**
 /*.tgz
+/library
