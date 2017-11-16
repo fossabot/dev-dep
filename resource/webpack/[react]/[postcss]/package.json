@@ -3,7 +3,7 @@
   "INSTALL": [ "config/" ],
   "dependencies": {
     "postcss-loader": "^2.0.8",
-    "postcss": "^6.0.13",
+    "postcss": "^6.0.14",
     "postcss-cssnext": "^3.0.2"
   }
 }
