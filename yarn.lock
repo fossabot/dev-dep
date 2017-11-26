@@ -1025,9 +1025,9 @@ doctrine@^2.0.0:
     esutils "^2.0.2"
     isarray "^1.0.0"
 
-dr-js@^0.6.0-dev.3:
-  version "0.6.0-dev.3"
-  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.6.0-dev.3.tgz#d77bff3aa78dae6929c9704be12c37f2ca9d6894"
+dr-js@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.6.0.tgz#49e35b3b60bd40d930b8165aa6a4ba3152cb74e0"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"
