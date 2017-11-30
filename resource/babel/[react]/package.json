@@ -1,5 +1,5 @@
 {
-  "IMPORT": [ "../[dev]" ],
+  "IMPORT": [ "../" ],
   "INSTALL": [ ".babelrc" ],
   "dependencies": {
     "babel-preset-react": "^6.24.1"

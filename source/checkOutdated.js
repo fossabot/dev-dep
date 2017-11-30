@@ -37,7 +37,7 @@ const collectPackageDependency = async (pathResource) => {
     if (fileType !== FILE_TYPE.Directory) return
     if (!nodeModuleFs.existsSync(nodeModulePath.join(path, name, 'package.json'))) return
     const packageSource = nodeModulePath.relative(pathResource, nodeModulePath.join(path, name))
-    console.log(`[checkOutdated] loading '${packageSource}'`)
+    __DEV__ && console.log(`[checkOutdated] loading '${packageSource}'`)
     const {
       dependencies,
       devDependencies,
@@ -58,18 +58,19 @@ const checkOutdatedWithNpm = async (dependencies, pathTemp) => {
   await writeFileAsync(nodeModulePath.join(pathTemp, 'package.json'), JSON.stringify({ dependencies }))
   const { code, status, stdoutString, stderrString } = await withCwd(pathTemp, runCommand)('npm outdated --registry=https://registry.npm.taobao.org --disturl=https://npm.taobao.org/dist').catch((error) => error)
   code && console.log(`  code: ${code}, status: ${status}`)
-  // stdoutString && console.log(Format.stringIndentLine(stdoutString, '  '))
+  __DEV__ && stdoutString && console.log(Format.stringIndentLine(stdoutString, '  '))
   stderrString && console.warn(Format.stringIndentLine(stderrString, '  '))
   await modify.delete(pathTemp)
   return stdoutString
 }
 
+const REGEXP_ANSI_ESCAPE_CODE = /\033\[[0-9;]*[a-zA-Z]/g // Match the terminal color code, Check: https://superuser.com/a/380778
 const REGEXP_NPM_OUTDATED_OUTPUT = /(\S+)\s+MISSING\s+\S+\s+(\S+)/ // Will Match: `(Package) Current Wanted (Latest) Location`
 const logCheckOutdatedResult = (packageInfoMap, npmOutdatedOutputString) => {
   const sameTable = []
   const outdatedTable = []
   npmOutdatedOutputString.split('\n').forEach((outputLine) => {
-    const [ , name, versionLatest ] = REGEXP_NPM_OUTDATED_OUTPUT.exec(outputLine) || []
+    const [ , name, versionLatest ] = REGEXP_NPM_OUTDATED_OUTPUT.exec(outputLine.replace(REGEXP_ANSI_ESCAPE_CODE, '')) || []
     if (!packageInfoMap[ name ]) return
     const { version, source } = packageInfoMap[ name ]
     const rowList = [ name, version, versionLatest, source ] // must match PAD_FUNC_LIST
@@ -78,6 +79,7 @@ const logCheckOutdatedResult = (packageInfoMap, npmOutdatedOutputString) => {
   sameTable.sort(sortTableRow)
   outdatedTable.sort(sortTableRow)
   const total = outdatedTable.length + sameTable.length
+  __DEV__ && console.log(`Total: ${total} | Same: ${sameTable.length} | Outdated: ${outdatedTable.length}`)
   outdatedTable.length && console.warn(`OUTDATED[${outdatedTable.length}/${total}]:\n${formatPadTable(outdatedTable)}`)
   sameTable.length && console.log(`SAME[${sameTable.length}/${total}]:\n${formatPadTable(sameTable)}`)
   return outdatedTable.length

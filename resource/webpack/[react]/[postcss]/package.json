@@ -1,6 +1,6 @@
 {
   "IMPORT": [ "../" ],
-  "INSTALL": [ "config/" ],
+  "INSTALL": [ ".webpackrc.js" ],
   "dependencies": {
     "postcss-loader": "^2.0.9",
     "postcss": "^6.0.14",

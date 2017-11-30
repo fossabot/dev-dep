@@ -4,6 +4,5 @@
     "../mocha",
     "../eslint/[react]",
     "../webpack/[react]"
-  ],
-  "EXPORT": [ "README.md" ]
+  ]
 }

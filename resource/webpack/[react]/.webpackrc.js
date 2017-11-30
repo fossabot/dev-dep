@@ -1,9 +1,9 @@
 const nodeModulePath = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
+const BabelMinifyPlugin = require('babel-minify-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const { HashedModuleIdsPlugin, DefinePlugin, BannerPlugin, optimize: { CommonsChunkPlugin, ModuleConcatenationPlugin } } = webpack
 
 const NODE_ENV = process.env.NODE_ENV
@@ -15,28 +15,24 @@ const OPTIONS = {
     presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], 'react' ],
     plugins: [ 'transform-class-properties', [ 'transform-object-rest-spread', { useBuiltIns: true } ] ]
   },
-  CSS_LOADER: { importLoaders: 1, localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' },
-  POSTCSS_LOADER: { plugins: () => [ require('postcss-cssnext') ] }
+  CSS_LOADER: { localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' }
 }
-
 module.exports = {
   entry: {
     vendor: [],
     index: 'pack/index'
   },
+  output: {
+    path: nodeModulePath.join(__dirname, '../../library/pack'),
+    filename: IS_PRODUCTION ? '[name].[chunkhash:8].js' : '[name].js'
+  },
   resolve: { alias: { pack: nodeModulePath.resolve(__dirname, '..') } },
+  bail: IS_PRODUCTION, // Don't attempt to continue if there are any errors.
+  devtool: IS_PRODUCTION ? 'source-map' : false,
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, use: [ { loader: 'babel-loader', options: OPTIONS.BABEL_LOADER } ] },
-      {
-        test: /\.pcss$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            { loader: 'css-loader', options: OPTIONS.CSS_LOADER },
-            { loader: 'postcss-loader', options: OPTIONS.POSTCSS_LOADER }
-          ]
-        })
-      }
+      { test: /\.pcss$/, use: ExtractTextPlugin.extract({ use: [ { loader: 'css-loader', options: OPTIONS.CSS_LOADER } ] }) }
     ]
   },
   plugins: [
@@ -51,7 +47,7 @@ module.exports = {
     new ManifestPlugin({ fileName: 'manifest.json' }),
     ...(IS_PRODUCTION ? [
       new ModuleConcatenationPlugin(),
-      new MinifyPlugin(),
+      new BabelMinifyPlugin(),
       new BannerPlugin({ banner: '/* eslint-disable */', raw: true, test: /\.js$/, entryOnly: false }),
       new BannerPlugin({ banner: '/* stylelint-disable */', raw: true, test: /\.css$/, entryOnly: false }),
       new CompressionPlugin({ minRatio: 1 })

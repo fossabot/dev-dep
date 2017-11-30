@@ -1,7 +1,6 @@
 {
   "mode": "pack",
   "pathEntry": "../resource/__entry__/dev-dep-web.json",
-  "pathOutput": "./output-gitignore/dev-dep-web",
-  "outputName": "dev-dep-web",
-  "outputDescription": "W · E · B = Webpack + ESLint + Babel"
+  "pathOutput": "../output-gitignore/dev-dep-web",
+  "outputName": "dev-dep-web"
 }

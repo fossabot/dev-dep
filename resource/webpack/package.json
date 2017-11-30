@@ -1,14 +1,15 @@
 {
+  "IMPORT": [ "../babel/" ],
+  "INSTALL": [ ".webpackrc.js" ],
   "scripts": {
-    "example": "cross-env NODE_ENV=production webpack --config config/example.conf.js",
-    "example-dev": "cross-env NODE_ENV=development webpack --watch --config config/example.conf.js",
-    "library": "cross-env NODE_ENV=production webpack --config config/library.conf.js",
-    "library-dev": "cross-env NODE_ENV=development webpack --watch --config config/library.conf.js",
-    "perf-webpack-stats": "cross-env NODE_ENV=production webpack --config config/library.conf.js --json > stats.json",
-    "perf-webpack-profile": "cross-env NODE_ENV=production webpack --config config/library.conf.js --profile"
+    "build-library": "cross-env NODE_ENV=production webpack --config .webpackrc.js",
+    "build-library-dev": "cross-env NODE_ENV=development webpack --watch --config .webpackrc.js",
+    "perf-webpack-stats": "cross-env NODE_ENV=production webpack --config .webpackrc.js --json > stats-gitignore.json",
+    "perf-webpack-profile": "cross-env NODE_ENV=production webpack --config .webpackrc.js --profile"
   },
   "dependencies": {
     "webpack": "^3.8.1",
-    "babel-loader": "^7.1.2"
+    "babel-loader": "^7.1.2",
+    "babel-minify-webpack-plugin": "^0.2.0"
   }
 }

@@ -1,8 +1,24 @@
 {
-  "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
-  "plugins": [
-    "transform-class-properties",
-    [ "transform-object-rest-spread", { "useBuiltIns": true } ],
-    [ "module-resolver", { "root": [ "./" ] } ]
-  ]
+  "env": {
+    "// COMMENT": "__DEV__ = false, use require()",
+    "library": {
+      "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
+      "plugins": [
+        [ "transform-class-properties" ],
+        [ "transform-object-rest-spread", { "useBuiltIns": true } ],
+        [ "module-resolver", { "root": [ "./" ] } ],
+        [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ]
+      ]
+    },
+    "// COMMENT": "__DEV__ = true, use require()",
+    "library-dev": {
+      "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
+      "plugins": [
+        [ "transform-class-properties" ],
+        [ "transform-object-rest-spread", { "useBuiltIns": true } ],
+        [ "module-resolver", { "root": [ "./" ] } ],
+        [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": true } } ] } ]
+      ]
+    }
+  }
 }

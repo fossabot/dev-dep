@@ -1,7 +1,11 @@
-import { Common } from 'dr-js/library/Dr.node'
-const { createOptionParser, OPTION_CONFIG_PRESET } = Common.Module
+import { Common, Node } from 'dr-js/library/Dr.node'
 
-const __DEV__ = true
+const { createOptionParser, OPTION_CONFIG_PRESET } = Common.Module
+const {
+  parseOptionMap,
+  getOptionOptional, getSingleOptionOptional,
+  getOption, getSingleOption
+} = Node.Module
 
 const checkModePackOption = (optionMap, optionFormatSet, format) => optionMap[ 'mode' ].argumentList[ 0 ] !== 'pack'
 
@@ -28,13 +32,15 @@ const OPTION_CONFIG = {
   } ]
 }
 
-const {
-  parseCLI,
-  parseENV,
-  parseJSON,
-  processOptionMap,
-  formatUsage
-} = createOptionParser(OPTION_CONFIG)
+const { parseCLI, parseENV, parseJSON, processOptionMap, formatUsage } = createOptionParser(OPTION_CONFIG)
+
+const parseOption = async () => ({
+  optionMap: await parseOptionMap({ parseCLI, parseENV, parseJSON, processOptionMap }),
+  getOption,
+  getOptionOptional,
+  getSingleOption,
+  getSingleOptionOptional
+})
 
 const exitWithError = (error) => {
   __DEV__ && console.warn(error)
@@ -42,10 +48,4 @@ const exitWithError = (error) => {
   process.exit(1)
 }
 
-export {
-  parseCLI,
-  parseENV,
-  parseJSON,
-  processOptionMap,
-  exitWithError
-}
+export { parseOption, exitWithError }

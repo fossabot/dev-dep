@@ -3,7 +3,6 @@
     "../__base__",
     "../mocha",
     "../eslint",
-    "../webpack/[dev]"
-  ],
-  "EXPORT": [ "README.md" ]
+    "../webpack"
+  ]
 }

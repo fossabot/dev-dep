@@ -2,7 +2,7 @@
   "env": {
     "// COMMENT": "__DEV__ = false, use require(), minify",
     "library-minify": {
-      "presets": [ [ "env", { "targets": ">= 5%" } ], [ "react" ], [ "minify" ] ],
+      "presets": [ [ "env", { "targets": { "node": 8 } } ], [ "minify" ] ],
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
@@ -12,7 +12,7 @@
     },
     "// COMMENT": "__DEV__ = false, use require()",
     "library": {
-      "presets": [ [ "env", { "targets": ">= 5%" } ], [ "react" ] ],
+      "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
@@ -22,7 +22,7 @@
     },
     "// COMMENT": "__DEV__ = true, use require()",
     "library-dev": {
-      "presets": [ [ "env", { "targets": { "node": 8 } } ], [ "react" ] ],
+      "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
@@ -32,7 +32,7 @@
     },
     "// COMMENT": "__DEV__ = false, use import from, remove unused code & comment",
     "module": {
-      "presets": [ [ "env", { "targets": ">= 5%", "modules": false } ], [ "react" ] ],
+      "presets": [ [ "env", { "targets": { "node": 8 }, "modules": false } ] ],
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],

@@ -3,6 +3,5 @@
     "../__base__",
     "../mocha",
     "../eslint/[react]"
-  ],
-  "EXPORT": [ "README.md" ]
+  ]
 }

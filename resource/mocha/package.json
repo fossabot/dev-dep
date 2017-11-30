@@ -1,8 +1,8 @@
 {
-  "IMPORT": [ "../babel/[dev]" ],
+  "IMPORT": [ "../babel" ],
   "scripts": {
     "test": "npm run test-mocha",
-    "test-mocha": "mocha --require babel-register \"source/**/*.test.js\""
+    "test-mocha": "cross-env BABEL_ENV=library mocha --require babel-register \"source/**/*.test.js\""
   },
   "dependencies": {
     "mocha": "^4.0.1",

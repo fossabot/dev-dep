@@ -1,4 +1,0 @@
-{
-  "IMPORT": [ "../", "../../babel/[dev]" ],
-  "INSTALL": [ "config/" ]
-}

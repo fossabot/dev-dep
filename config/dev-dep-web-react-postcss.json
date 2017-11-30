@@ -1,7 +1,6 @@
 {
   "mode": "pack",
   "pathEntry": "../resource/__entry__/dev-dep-web-react-postcss.json",
-  "pathOutput": "./output-gitignore/dev-dep-web-react-postcss",
-  "outputName": "dev-dep-web-react-postcss",
-  "outputDescription": "W · E · B = Webpack + ESLint + Babel"
+  "pathOutput": "../output-gitignore/dev-dep-web-react-postcss",
+  "outputName": "dev-dep-web-react-postcss"
 }

@@ -1,7 +1,6 @@
 {
   "mode": "pack",
   "pathEntry": "../resource/__entry__/dev-dep-babel-react.json",
-  "pathOutput": "./output-gitignore/dev-dep-babel-react",
-  "outputName": "dev-dep-babel-react",
-  "outputDescription": "W · E · B = Webpack + ESLint + Babel"
+  "pathOutput": "../output-gitignore/dev-dep-babel-react",
+  "outputName": "dev-dep-babel-react"
 }

@@ -1,5 +1,5 @@
 {
-  "IMPORT": [ "../babel/[dev]" ],
+  "IMPORT": [ "../babel" ],
   "INSTALL": [ ".eslintrc.js" ],
   "dependencies": {
     "eslint": "^4.12.0",
