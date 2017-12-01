@@ -1,5 +1,3 @@
-# dev-dependency-pack
+# package-name
 
-W · E · B = Webpack + ESLint + Babel
-
-Provide common package devDependencies
+Package description

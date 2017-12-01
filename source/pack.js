@@ -25,11 +25,15 @@ const loadPackage = (packageInfo, packagePath, loadedSet = new Set()) => {
   importList && importList.forEach((importPackagePath) => loadPackage(packageInfo, nodeModulePath.resolve(packagePath, importPackagePath), loadedSet))
 
   console.log(`[loadPackage] load: ${packageFile}`)
-  installList && installList.forEach((filePath) => installFilePairList.push([ nodeModulePath.resolve(packagePath, filePath), filePath ]))
-  exportList && exportList.forEach((filePath) => exportFilePairList.push([ nodeModulePath.resolve(packagePath, filePath), filePath ]))
+  installList && installList.forEach((filePath) => installFilePairList.push(parseResourcePath(filePath, packagePath)))
+  exportList && exportList.forEach((filePath) => exportFilePairList.push(parseResourcePath(filePath, packagePath)))
   mergePackageObject && objectMergeDeep(packageObject, mergePackageObject)
   return packageInfo
 }
+
+const parseResourcePath = (resourcePath, packagePath) => typeof (resourcePath) === 'object'
+  ? [ nodeModulePath.resolve(packagePath, resourcePath.from), resourcePath.to ]
+  : [ nodeModulePath.resolve(packagePath, resourcePath), resourcePath ]
 
 const PACKAGE_KEY_ORDER = [
   'private',

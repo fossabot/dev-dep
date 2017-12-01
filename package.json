@@ -41,6 +41,6 @@
   },
   "devDependencies": {
     "dev-dep-babel": "^0.0.8",
-    "dr-js": "0.7.0-dev.2"
+    "dr-js": "^0.7.0"
   }
 }

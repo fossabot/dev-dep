@@ -1,6 +1,13 @@
 {
-  "EXPORT": [ ".npmignore", "README.md" ],
-  "INSTALL": [ "dot.gitignore", "dot.npmignore", "README.md" ],
+  "EXPORT": [
+    ".npmignore",
+    { "from": "../../README.md", "to": "README.md" }
+  ],
+  "INSTALL": [
+    "sample.gitignore",
+    "sample.npmignore",
+    "README.md"
+  ],
   "version": "0.0.8",
   "author": "dr-js",
   "license": "MIT",

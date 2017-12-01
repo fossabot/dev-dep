@@ -12,8 +12,8 @@ const IS_PRODUCTION = NODE_ENV === 'production'
 const OPTIONS = {
   BABEL_LOADER: {
     babelrc: false,
-    presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], 'react' ],
-    plugins: [ 'transform-class-properties', [ 'transform-object-rest-spread', { useBuiltIns: true } ] ]
+    presets: [ [ 'env', { targets: IS_PRODUCTION ? '>= 5%' : { browser: 'last 2 Chrome versions' }, modules: false } ], [ 'react' ] ],
+    plugins: [ [ 'transform-class-properties' ], [ 'transform-object-rest-spread', { useBuiltIns: true } ] ]
   },
   CSS_LOADER: { localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' }
 }
@@ -50,7 +50,7 @@ module.exports = {
       new BabelMinifyPlugin(),
       new BannerPlugin({ banner: '/* eslint-disable */', raw: true, test: /\.js$/, entryOnly: false }),
       new BannerPlugin({ banner: '/* stylelint-disable */', raw: true, test: /\.css$/, entryOnly: false }),
-      new CompressionPlugin({ minRatio: 1 })
+      new CompressionPlugin({ test: /\.(js|css)$/, minRatio: 1 })
     ] : [])
   ]
 }
