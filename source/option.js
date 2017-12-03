@@ -1,4 +1,4 @@
-import { Common, Node } from 'dr-js/library/Dr.node'
+import { Common, Node } from 'dr-js/module/Dr.node'
 
 const { createOptionParser, OPTION_CONFIG_PRESET } = Common.Module
 const {
@@ -7,27 +7,26 @@ const {
   getOption, getSingleOption
 } = Node.Module
 
-const checkModePackOption = (optionMap, optionFormatSet, format) => optionMap[ 'mode' ].argumentList[ 0 ] !== 'pack'
+const PackPathFormat = { ...OPTION_CONFIG_PRESET.SingleString, isPath: true, optional: (optionMap) => optionMap[ 'mode' ].argumentList[ 0 ] !== 'pack' }
 
 const OPTION_CONFIG = {
   prefixENV: 'packager',
   formatList: [ {
+    ...OPTION_CONFIG_PRESET.SingleString,
     name: 'config',
     shortName: 'c',
     optional: true,
-    description: `# from JSON: set to path relative process.cwd()\n# from ENV: set to 'env' to collect from process.env`,
-    ...OPTION_CONFIG_PRESET.SingleString
+    description: `# from JSON: set to 'path/to/config.json'\n# from ENV: set to 'env'`
   }, {
+    ...OPTION_CONFIG_PRESET.OneOfString([ 'pack', 'p', 'check-outdated', 'co' ]),
     name: 'mode',
     shortName: 'm',
-    description: `should be 'pack', 'check-outdated' or 'p', 'co' in short`,
-    ...OPTION_CONFIG_PRESET.OneOfString([ 'pack', 'check-outdated', 'p', 'co' ]),
     extendFormatList: [
-      { name: 'path-entry', shortName: 'e', optional: checkModePackOption, description: `starting path to 'package.json', or directory with 'package.json' inside`, ...OPTION_CONFIG_PRESET.SingleString, isPath: true },
-      { name: 'path-output', shortName: 'o', optional: checkModePackOption, description: `output path`, ...OPTION_CONFIG_PRESET.SingleString, isPath: true },
-      { name: 'output-name', shortName: 'n', optional: true, description: `output package name`, ...OPTION_CONFIG_PRESET.SingleString },
-      { name: 'output-version', shortName: 'v', optional: true, description: `output package version`, ...OPTION_CONFIG_PRESET.SingleString },
-      { name: 'output-description', shortName: 'd', optional: true, description: `output package description`, ...OPTION_CONFIG_PRESET.SingleString }
+      { ...PackPathFormat, name: 'path-entry', shortName: 'e', description: `starting path to 'package.json', or directory with 'package.json' inside` },
+      { ...PackPathFormat, name: 'path-output', shortName: 'o', description: `output path` },
+      { ...OPTION_CONFIG_PRESET.SingleString, name: 'output-name', shortName: 'n', optional: true, description: `output package name` },
+      { ...OPTION_CONFIG_PRESET.SingleString, name: 'output-version', shortName: 'v', optional: true, description: `output package version` },
+      { ...OPTION_CONFIG_PRESET.SingleString, name: 'output-description', shortName: 'd', optional: true, description: `output package description` }
     ]
   } ]
 }

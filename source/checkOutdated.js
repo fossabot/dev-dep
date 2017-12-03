@@ -1,7 +1,7 @@
 import nodeModulePath from 'path'
 import nodeModuleFs from 'fs'
 import { promisify } from 'util'
-import { Common, Node } from 'dr-js/library/Dr.node'
+import { Common, Node } from 'dr-js/module/Dr.node'
 
 const { Format } = Common
 const {

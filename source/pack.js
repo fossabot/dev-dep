@@ -1,7 +1,7 @@
 import nodeModulePath from 'path'
 import nodeModuleFs from 'fs'
 import { promisify } from 'util'
-import { Common } from 'dr-js/library/Dr.node'
+import { Common } from 'dr-js/module/Dr.node'
 const writeFileAsync = promisify(nodeModuleFs.writeFile)
 const { Format, Mutable: { MutableOperation: { objectMergeDeep } } } = Common
 

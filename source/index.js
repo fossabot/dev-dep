@@ -1,5 +1,5 @@
 import nodeModulePath from 'path'
-import { Common, Node } from 'dr-js/library/Dr.node'
+import { Common, Node } from 'dr-js/module/Dr.node'
 
 import { checkOutdated } from './checkOutdated'
 import { GET_INITIAL_PACKAGE_INFO, loadPackage, writePackageJSON } from './pack'
