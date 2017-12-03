@@ -49,6 +49,11 @@ const PACKAGE_KEY_ORDER = [
 
 // write
 const writePackageJSON = async (packageObject, path) => {
+  if (packageObject.dependencies) packageObject.dependencies = sortObjectKeyOrder(packageObject.dependencies)
+  if (packageObject.devDependencies) packageObject.devDependencies = sortObjectKeyOrder(packageObject.devDependencies)
+  if (packageObject.peerDependencies) packageObject.peerDependencies = sortObjectKeyOrder(packageObject.peerDependencies)
+  if (packageObject.optionalDependencies) packageObject.optionalDependencies = sortObjectKeyOrder(packageObject.optionalDependencies)
+  if (packageObject.bundledDependencies) packageObject.bundledDependencies = sortObjectKeyOrder(packageObject.bundledDependencies)
   const jsonFileString = Object.entries(packageObject)
     .sort(([ a ], [ b ]) => PACKAGE_KEY_ORDER.indexOf(a) - PACKAGE_KEY_ORDER.indexOf(b))
     .map(([ key, value ]) => Format.stringIndentLine(`${JSON.stringify(key)}: ${JSON.stringify(value, null, 2)}`))
@@ -57,6 +62,13 @@ const writePackageJSON = async (packageObject, path) => {
   await writeFileAsync(path, packageBuffer)
   console.log(`[writePackageJSON] ${path} [${Format.binary(packageBuffer.length)}B]`)
 }
+
+const sortObjectKeyOrder = (object) => Object.entries(object)
+  .sort(([ a ], [ b ]) => a.localeCompare(b))
+  .reduce((o, [ key, value ]) => {
+    o[ key ] = value
+    return o
+  }, {})
 
 export {
   GET_INITIAL_PACKAGE_INFO,
