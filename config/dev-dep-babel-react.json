@@ -2,5 +2,6 @@
   "mode": "pack",
   "pathEntry": "../resource/__entry__/dev-dep-babel-react.json",
   "pathOutput": "../output-gitignore/dev-dep-babel-react",
-  "outputName": "dev-dep-babel-react"
+  "outputName": "dev-dep-babel-react",
+  "outputDescription": "ESLint + Babel + Mocha + React"
 }
