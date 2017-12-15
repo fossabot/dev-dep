@@ -1156,9 +1156,9 @@ detect-libc@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.2.tgz#71ad5d204bf17a6a6ca8f450c61454066ef461e1"
 
-dev-dep-babel@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/dev-dep-babel/-/dev-dep-babel-0.0.9.tgz#666579a72eec880c090aef75eea576a6c3fabf4d"
+dev-dep-babel@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/dev-dep-babel/-/dev-dep-babel-0.0.10.tgz#b0b8b1803e06f715d74a66fdc71a988a4ed5a7b0"
   dependencies:
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
@@ -1195,9 +1195,9 @@ doctrine@^2.0.2:
   dependencies:
     esutils "^2.0.2"
 
-dr-js@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.7.1.tgz#1caf728c9291072574c82ff3731bfe6c37008e97"
+dr-js@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.9.1.tgz#0c73211745c4d1aa553f54cd3c2b333a292924ea"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"

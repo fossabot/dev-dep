@@ -2,6 +2,7 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
-    "../eslint/[react]"
+    "../eslint/[react]",
+    "../babel/[react]"
   ]
 }

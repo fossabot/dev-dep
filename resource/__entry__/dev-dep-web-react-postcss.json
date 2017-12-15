@@ -2,7 +2,8 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
+    "../webpack/[react]/[postcss]",
     "../eslint/[react]",
-    "../webpack/[react]/[postcss]"
+    "../babel/[react]"
   ]
 }

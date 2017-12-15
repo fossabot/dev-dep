@@ -93,6 +93,6 @@ const PAD_FUNC_LIST = [
   undefined, // versionLatest
   (source, maxWidth) => source // source
 ]
-const formatPadTable = (table) => Format.formatPadTable({ table, cellPad: ' | ', padFuncList: PAD_FUNC_LIST })
+const formatPadTable = (table) => Format.padTable({ table, cellPad: ' | ', padFuncList: PAD_FUNC_LIST })
 
 export { checkOutdated }

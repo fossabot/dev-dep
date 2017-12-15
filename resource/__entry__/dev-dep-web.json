@@ -2,7 +2,8 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
+    "../webpack",
     "../eslint",
-    "../webpack"
+    "../babel"
   ]
 }

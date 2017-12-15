@@ -15,7 +15,8 @@ const main = async () => {
     switch (getSingleOption(optionMap, 'mode')) {
       case 'check-outdated':
       case 'co':
-        return checkOutdated()
+        await checkOutdated()
+        break
       case 'pack':
       case 'p':
         const pathEntry = getSingleOption(optionMap, 'path-entry')

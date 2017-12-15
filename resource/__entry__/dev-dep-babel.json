@@ -2,6 +2,7 @@
   "IMPORT": [
     "../__base__",
     "../mocha",
-    "../eslint"
+    "../eslint",
+    "../babel"
   ]
 }
