@@ -1,5 +1,4 @@
 {
-  "mode": "pack",
   "pathEntry": "../resource/__entry__/dev-dep-babel.json",
   "pathOutput": "../output-gitignore/dev-dep-babel",
   "outputName": "dev-dep-babel",

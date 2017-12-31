@@ -6,7 +6,7 @@
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
-        [ "module-resolver", { "root": [ "./" ], "alias": { "dr-js/module/Dr.node": "dr-js/library/Dr.node" } } ],
+        [ "module-resolver", { "root": [ "./" ], "alias": { "dr-js/module/(.+)": "dr-js/library/" } } ],
         [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ]
       ]
     },
@@ -16,7 +16,7 @@
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
-        [ "module-resolver", { "root": [ "./" ], "alias": { "dr-js/module/Dr.node": "dr-js/library/Dr.node" } } ],
+        [ "module-resolver", { "root": [ "./" ], "alias": { "dr-js/module/(.+)": "dr-js/library/" } } ],
         [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": true } } ] } ]
       ]
     }

@@ -1,28 +1,8 @@
 import nodeModulePath from 'path'
-import nodeModuleFs from 'fs'
-import { promisify } from 'util'
-import { Common, Node } from 'dr-js/module/Dr.node'
-
-const { Format } = Common
-const {
-  Module: { runCommand, withCwd },
-  File: { FILE_TYPE, createDirectory, getDirectoryContent, walkDirectoryContent, modify }
-} = Node
-
-const readFileAsync = promisify(nodeModuleFs.readFile)
-const writeFileAsync = promisify(nodeModuleFs.writeFile)
-
-// TODO: use option from CLI/JSON?
-const PATH_RESOURCE = nodeModulePath.resolve(__dirname, '../resource')
-const PATH_TEMP = nodeModulePath.resolve(__dirname, '../check-outdated-gitignore')
-
-// check
-const checkOutdated = async () => {
-  const { packageInfoMap, dependencyMap } = await collectPackageDependency(PATH_RESOURCE)
-  const npmOutdatedOutputString = await checkOutdatedWithNpm(dependencyMap, PATH_TEMP)
-  const outdatedCount = logCheckOutdatedResult(packageInfoMap, npmOutdatedOutputString)
-  process.exit(outdatedCount)
-}
+import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { spawnSync } from 'child_process'
+import { stringIndentLine, padTable } from 'dr-js/module/common/format'
+import { FILE_TYPE, createDirectory, getDirectoryContent, walkDirectoryContent, modify } from 'dr-js/module/node/file'
 
 const collectPackageDependency = async (pathResource) => {
   const packageInfoMap = {} // [name]: { name, version, source }
@@ -35,7 +15,7 @@ const collectPackageDependency = async (pathResource) => {
   const collectDependencyObject = (dependencyObject, source) => Object.entries(dependencyObject).forEach(([ key, value ]) => collectPackage(key, value, source))
   await walkDirectoryContent(await getDirectoryContent(pathResource), async (path, name, fileType) => {
     if (fileType !== FILE_TYPE.Directory) return
-    if (!nodeModuleFs.existsSync(nodeModulePath.join(path, name, 'package.json'))) return
+    if (!existsSync(nodeModulePath.join(path, name, 'package.json'))) return
     const packageSource = nodeModulePath.relative(pathResource, nodeModulePath.join(path, name))
     __DEV__ && console.log(`[checkOutdated] loading '${packageSource}'`)
     const {
@@ -43,7 +23,7 @@ const collectPackageDependency = async (pathResource) => {
       devDependencies,
       peerDependencies,
       optionalDependencies
-    } = JSON.parse(await readFileAsync(nodeModulePath.join(path, name, 'package.json'), 'utf8'))
+    } = JSON.parse(readFileSync(nodeModulePath.join(path, name, 'package.json'), 'utf8'))
     dependencies && collectDependencyObject(dependencies, packageSource)
     devDependencies && collectDependencyObject(devDependencies, packageSource)
     peerDependencies && collectDependencyObject(peerDependencies, packageSource)
@@ -55,13 +35,17 @@ const collectPackageDependency = async (pathResource) => {
 const checkOutdatedWithNpm = async (dependencies, pathTemp) => {
   console.log(`[checkOutdated] create and checking '${pathTemp}'`)
   await createDirectory(pathTemp)
-  await writeFileAsync(nodeModulePath.join(pathTemp, 'package.json'), JSON.stringify({ dependencies }))
-  const { code, status, stdoutString, stderrString } = await withCwd(pathTemp, runCommand)('npm outdated --registry=https://registry.npm.taobao.org --disturl=https://npm.taobao.org/dist').catch((error) => error)
-  code && console.log(`  code: ${code}, status: ${status}`)
-  __DEV__ && stdoutString && console.log(Format.stringIndentLine(stdoutString, '  '))
-  stderrString && console.warn(Format.stringIndentLine(stderrString, '  '))
+  writeFileSync(nodeModulePath.join(pathTemp, 'package.json'), JSON.stringify({ dependencies }))
+  const { stdout, status, signal, error } = spawnSync(
+    'npm',
+    [ 'outdated', '--registry=https://registry.npm.taobao.org', '--disturl=https://npm.taobao.org/dist' ],
+    { cwd: pathTemp, stdio: [ 'pipe', 'pipe', 'inherit' ], shell: true }
+  )
   await modify.delete(pathTemp)
-  return stdoutString
+  __DEV__ && console.log(`  status: ${status}, signal: ${signal}`)
+  __DEV__ && console.log(stringIndentLine(stdout.toString(), '  '))
+  if (error) throw error
+  return stdout.toString()
 }
 
 const REGEXP_ANSI_ESCAPE_CODE = /\033\[[0-9;]*[a-zA-Z]/g // Match the terminal color code, Check: https://superuser.com/a/380778
@@ -76,12 +60,12 @@ const logCheckOutdatedResult = (packageInfoMap, npmOutdatedOutputString) => {
     const rowList = [ name, version, versionLatest, source ] // must match PAD_FUNC_LIST
     version.endsWith(versionLatest) ? sameTable.push(rowList) : outdatedTable.push(rowList)
   })
-  sameTable.sort(sortTableRow)
-  outdatedTable.sort(sortTableRow)
-  const total = outdatedTable.length + sameTable.length
+  const total = sameTable.length + outdatedTable.length
   __DEV__ && console.log(`Total: ${total} | Same: ${sameTable.length} | Outdated: ${outdatedTable.length}`)
-  outdatedTable.length && console.warn(`OUTDATED[${outdatedTable.length}/${total}]:\n${formatPadTable(outdatedTable)}`)
+  sameTable.sort(sortTableRow)
   sameTable.length && console.log(`SAME[${sameTable.length}/${total}]:\n${formatPadTable(sameTable)}`)
+  outdatedTable.sort(sortTableRow)
+  outdatedTable.length && console.log(`OUTDATED[${outdatedTable.length}/${total}]:\n${formatPadTable(outdatedTable)}`)
   return outdatedTable.length
 }
 
@@ -93,6 +77,13 @@ const PAD_FUNC_LIST = [
   undefined, // versionLatest
   (source, maxWidth) => source // source
 ]
-const formatPadTable = (table) => Format.padTable({ table, cellPad: ' | ', padFuncList: PAD_FUNC_LIST })
+const formatPadTable = (table) => padTable({ table, cellPad: ' | ', padFuncList: PAD_FUNC_LIST })
 
-export { checkOutdated }
+const doCheckOutdated = async ({ pathResource, pathTemp }) => {
+  const { packageInfoMap, dependencyMap } = await collectPackageDependency(pathResource)
+  const npmOutdatedOutputString = await checkOutdatedWithNpm(dependencyMap, pathTemp)
+  const outdatedCount = logCheckOutdatedResult(packageInfoMap, npmOutdatedOutputString)
+  process.exit(outdatedCount)
+}
+
+export { doCheckOutdated }

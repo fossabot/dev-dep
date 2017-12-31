@@ -19,19 +19,17 @@
     "url": "https://github.com/dr-js/dev-dependency-pack/issues"
   },
   "scripts": {
-    "pack": "npm run build && npm run pack-check-outdated && npm run pack-all",
-    "pack-check-outdated": "node library/index.js -m co",
-    "pack-all": "npm run pack-clear && npm run pack-dev-dep-babel && npm run pack-dev-dep-babel-react && npm run pack-dev-dep-web && npm run pack-dev-dep-web-react && npm run pack-dev-dep-web-react-postcss",
+    "// run =========================": "",
+    "run-pack-only": "node ./config/run-pack.js pack-only",
+    "run-pack-publish": "node ./config/run-pack.js pack-publish",
+    "// pack ========================": "",
+    "pack-check-outdated": "node ./library -m co",
     "pack-clear": "dr-js -m rm -a ./output-gitignore",
-    "pack-dev-dep-babel": "node library/index.js -c config/dev-dep-babel.json",
-    "pack-dev-dep-babel-react": "node library/index.js -c config/dev-dep-babel-react.json",
-    "pack-dev-dep-web": "node library/index.js -c config/dev-dep-web.json",
-    "pack-dev-dep-web-react": "node library/index.js -c config/dev-dep-web-react.json",
-    "pack-dev-dep-web-react-postcss": "node library/index.js -c config/dev-dep-web-react-postcss.json",
+    "// build =======================": "",
     "build": "npm run build-clear && npm run build-library",
     "build-clear": "dr-js -m rm -a ./library",
-    "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel source --out-dir library",
-    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel source --out-dir library --watch",
+    "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel source --out-dir ./library",
+    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel source --out-dir ./library --watch",
     "start": "npm run build-library-dev",
     "publish": "echo \"Error: should not publish this package\" && exit 1"
   },
@@ -40,7 +38,7 @@
     "npm": ">=5.5.0"
   },
   "devDependencies": {
-    "dev-dep-babel": "^0.0.10",
-    "dr-js": "^0.9.1"
+    "dev-dep-babel": "^0.0.11",
+    "dr-js": "^0.10.2-dev.0"
   }
 }

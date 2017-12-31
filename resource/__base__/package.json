@@ -8,7 +8,7 @@
     "sample.npmignore",
     "README.md"
   ],
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "dr-js",
   "license": "MIT",
   "description": "W · E · B = Webpack + ESLint + Babel",

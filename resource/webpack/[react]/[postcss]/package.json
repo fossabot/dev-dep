@@ -2,8 +2,8 @@
   "IMPORT": [ "../" ],
   "INSTALL": [ ".webpackrc.js" ],
   "dependencies": {
-    "postcss-loader": "^2.0.9",
-    "postcss": "^6.0.14",
-    "postcss-cssnext": "^3.0.2"
+    "postcss-loader": "^2.0.10",
+    "postcss": "^6.0.16",
+    "postcss-cssnext": "^3.1.0"
   }
 }
