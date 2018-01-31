@@ -1,44 +1,56 @@
 {
   "private": true,
-  "name": "dev-dependency-pack",
-  "version": "0.0.0",
+  "name": "dev-dep-tool",
+  "version": "0.0.13-dev.0",
   "author": "dr-js",
   "license": "MIT",
-  "description": "W · E · B = Webpack + ESLint + Babel",
+  "description": "Provide common package devDependencies",
   "keywords": [
     "Dr",
     "Dr-js",
     "JavaScript"
   ],
-  "homepage": "https://github.com/dr-js/dev-dependency-pack#readme",
+  "homepage": "https://github.com/dr-js/dev-dep#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dr-js/dev-dependency-pack.git"
+    "url": "git+https://github.com/dr-js/dev-dep.git"
   },
   "bugs": {
-    "url": "https://github.com/dr-js/dev-dependency-pack/issues"
+    "url": "https://github.com/dr-js/dev-dep/issues"
   },
+  "bin": "bin/index.js",
   "scripts": {
-    "// run =========================": "",
-    "run-pack-only": "node ./config/run-pack.js pack-only",
-    "run-pack-publish": "node ./config/run-pack.js pack-publish",
+    "// script ======================": "",
+    "script-base": "cross-env BABEL_ENV=library babel-node ./script",
+    "script-pack": "cross-env BABEL_ENV=library babel-node ./script pack",
+    "script-publish": "cross-env BABEL_ENV=library babel-node ./script pack publish",
+    "script-publish-dev": "cross-env BABEL_ENV=library babel-node ./script pack publish-dev",
+    "script-pack-package": "cross-env BABEL_ENV=library babel-node ./script pack pack-package",
+    "script-pack-package-publish": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish",
+    "script-pack-package-publish-dev": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish-dev",
+    "// dev =========================": "",
+    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source --out-dir ./output-gitignore/library --watch",
+    "build-tool-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source-tool --out-dir ./output-gitignore/tool --watch",
+    "build-bin-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source-bin --out-dir ./output-gitignore/bin --watch",
     "// pack ========================": "",
-    "pack-check-outdated": "node ./library -m co",
-    "pack-clear": "dr-js -m rm -a ./output-gitignore",
+    "pack-check-outdated": "node ./output-gitignore/bin -C -i ./resource",
+    "pack-clear": "dr-js -m rm -a ./output-package-gitignore",
     "// build =======================": "",
-    "build": "npm run build-clear && npm run build-library",
-    "build-clear": "dr-js -m rm -a ./library",
-    "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel source --out-dir ./library",
-    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel source --out-dir ./library --watch",
-    "start": "npm run build-library-dev",
-    "publish": "echo \"Error: should not publish this package\" && exit 1"
+    "build": "npm run build-clear && npm run build-library && npm run build-tool && npm run build-bin",
+    "build-clear": "dr-js -m rm -a ./output-gitignore",
+    "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source --out-dir ./output-gitignore/library",
+    "build-tool": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source-tool --out-dir ./output-gitignore/tool",
+    "build-bin": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source-bin --out-dir ./output-gitignore/bin",
+    "prepack": "echo \"Error: should not prepack this package\" && exit 1"
   },
   "engines": {
     "node": ">=8.8.0",
     "npm": ">=5.5.0"
   },
+  "dependencies": {
+    "dr-js": "^0.11.0-dev.3"
+  },
   "devDependencies": {
-    "dev-dep-babel": "^0.0.11",
-    "dr-js": "^0.10.2-dev.0"
+    "dev-dep-babel": "^0.0.12"
   }
 }

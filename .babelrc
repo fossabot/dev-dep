@@ -1,16 +1,22 @@
 {
   "env": {
-    "// COMMENT": "__DEV__ = false, use require()",
+    "// __DEV__ = false, use require(), simplify": "",
     "library": {
       "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
       "plugins": [
         [ "transform-class-properties" ],
         [ "transform-object-rest-spread", { "useBuiltIns": true } ],
         [ "module-resolver", { "root": [ "./" ], "alias": { "dr-js/module/(.+)": "dr-js/library/" } } ],
-        [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ]
-      ]
+        [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ],
+        [ "minify-simplify" ],
+        [ "minify-mangle-names", { "topLevel": true } ],
+        [ "minify-constant-folding" ],
+        [ "minify-guarded-expressions" ],
+        [ "minify-dead-code-elimination" ]
+      ],
+      "comments": false
     },
-    "// COMMENT": "__DEV__ = true, use require()",
+    "// __DEV__ = true, use require()": "",
     "library-dev": {
       "presets": [ [ "env", { "targets": { "node": 8 } } ] ],
       "plugins": [

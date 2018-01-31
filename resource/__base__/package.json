@@ -8,22 +8,22 @@
     "sample.npmignore",
     "README.md"
   ],
-  "version": "0.0.12",
+  "version": "",
   "author": "dr-js",
   "license": "MIT",
-  "description": "W · E · B = Webpack + ESLint + Babel",
+  "description": "",
   "keywords": [
     "Dr",
     "Dr-js",
     "JavaScript"
   ],
-  "homepage": "https://github.com/dr-js/dev-dependency-pack#readme",
+  "homepage": "https://github.com/dr-js/dev-dep#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dr-js/dev-dependency-pack.git"
+    "url": "git+https://github.com/dr-js/dev-dep.git"
   },
   "bugs": {
-    "url": "https://github.com/dr-js/dev-dependency-pack/issues"
+    "url": "https://github.com/dr-js/dev-dep/issues"
   },
   "engines": {
     "node": ">=8.8.0",

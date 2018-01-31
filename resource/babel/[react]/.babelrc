@@ -1,6 +1,6 @@
 {
   "env": {
-    "// COMMENT": "__DEV__ = false, use require(), minify",
+    "// __DEV__ = false, use require(), minify": "",
     "library-minify": {
       "presets": [ [ "env", { "targets": ">= 5%" } ], [ "react" ], [ "minify" ] ],
       "plugins": [
@@ -10,7 +10,7 @@
         [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ]
       ]
     },
-    "// COMMENT": "__DEV__ = false, use require()",
+    "// __DEV__ = false, use require()": "",
     "library": {
       "presets": [ [ "env", { "targets": ">= 5%" } ], [ "react" ] ],
       "plugins": [
@@ -20,7 +20,7 @@
         [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": false } } ] } ]
       ]
     },
-    "// COMMENT": "__DEV__ = true, use require()",
+    "// __DEV__ = true, use require()": "",
     "library-dev": {
       "presets": [ [ "env", { "targets": { "node": 8 } } ], [ "react" ] ],
       "plugins": [
@@ -30,7 +30,7 @@
         [ "minify-replace", { "replacements": [ { "identifierName": "__DEV__", "replacement": { "type": "booleanLiteral", "value": true } } ] } ]
       ]
     },
-    "// COMMENT": "__DEV__ = false, use import from, remove unused code & comment",
+    "// __DEV__ = false, use import from, remove unused code & comment": "",
     "module": {
       "presets": [ [ "env", { "targets": ">= 5%", "modules": false } ], [ "react" ] ],
       "plugins": [

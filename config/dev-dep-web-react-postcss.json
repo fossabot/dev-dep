@@ -1,6 +1,6 @@
 {
-  "pathEntry": "../resource/__entry__/dev-dep-web-react-postcss.json",
-  "pathOutput": "../output-gitignore/dev-dep-web-react-postcss",
+  "pathInput": "../resource/__entry__/dev-dep-web-react-postcss.json",
+  "pathOutput": "../output-package-gitignore/dev-dep-web-react-postcss",
   "outputName": "dev-dep-web-react-postcss",
   "outputDescription": "Webpack + ESLint + Babel + Mocha + React + PastCSS"
 }

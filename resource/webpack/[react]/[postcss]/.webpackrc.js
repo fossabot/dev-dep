@@ -1,10 +1,9 @@
-const nodeModulePath = require('path')
-const webpack = require('webpack')
+const { resolve } = require('path')
+const { HashedModuleIdsPlugin, DefinePlugin, BannerPlugin, optimize: { CommonsChunkPlugin, ModuleConcatenationPlugin } } = require('webpack')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const BabelMinifyPlugin = require('babel-minify-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const { HashedModuleIdsPlugin, DefinePlugin, BannerPlugin, optimize: { CommonsChunkPlugin, ModuleConcatenationPlugin } } = webpack
 
 const NODE_ENV = process.env.NODE_ENV
 const IS_PRODUCTION = NODE_ENV === 'production'
@@ -25,10 +24,10 @@ module.exports = {
     index: 'pack/index'
   },
   output: {
-    path: nodeModulePath.join(__dirname, '../../library/pack'),
+    path: resolve(__dirname, '../../library/pack'),
     filename: IS_PRODUCTION ? '[name].[chunkhash:8].js' : '[name].js'
   },
-  resolve: { alias: { pack: nodeModulePath.resolve(__dirname, '..') } },
+  resolve: { alias: { pack: resolve(__dirname, '..') } },
   bail: IS_PRODUCTION, // Don't attempt to continue if there are any errors.
   devtool: IS_PRODUCTION ? 'source-map' : false,
   module: {

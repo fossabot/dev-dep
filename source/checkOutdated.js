@@ -1,46 +1,46 @@
-import nodeModulePath from 'path'
-import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { resolve, relative, dirname } from 'path'
 import { spawnSync } from 'child_process'
-import { stringIndentLine, padTable } from 'dr-js/module/common/format'
-import { FILE_TYPE, createDirectory, getDirectoryContent, walkDirectoryContent, modify } from 'dr-js/module/node/file'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 
-const collectPackageDependency = async (pathResource) => {
+import { stringIndentLine, padTable } from 'dr-js/module/common/format'
+import { FILE_TYPE, createDirectory } from 'dr-js/module/node/file/File'
+import { getDirectoryContent, walkDirectoryContent, getFileList } from 'dr-js/module/node/file/Directory'
+import { modify } from 'dr-js/module/node/file/Modify'
+
+const collectPackageDependency = async (pathInput) => {
   const packageInfoMap = {} // [name]: { name, version, source }
   const dependencyMap = {} // [name]: version
   const collectPackage = (name, version, source) => {
-    if (packageInfoMap[ name ]) throw new Error(`[collectPackage] duplicate package: ${JSON.stringify({ name, version, source })}`)
+    if (packageInfoMap[ name ]) return console.warn(`[collectPackage] dropped duplicate package: ${name} at ${source} with version: ${version}, checking: ${packageInfoMap[ name ].version}`)
     packageInfoMap[ name ] = { name, version, source }
     dependencyMap[ name ] = version
   }
   const collectDependencyObject = (dependencyObject, source) => Object.entries(dependencyObject).forEach(([ key, value ]) => collectPackage(key, value, source))
-  await walkDirectoryContent(await getDirectoryContent(pathResource), async (path, name, fileType) => {
-    if (fileType !== FILE_TYPE.Directory) return
-    if (!existsSync(nodeModulePath.join(path, name, 'package.json'))) return
-    const packageSource = nodeModulePath.relative(pathResource, nodeModulePath.join(path, name))
+
+  const fileList = await getFileList(pathInput)
+  fileList.filter((path) => path.endsWith('package.json')).forEach((path) => {
+    const packageSource = relative(pathInput, path)
     __DEV__ && console.log(`[checkOutdated] loading '${packageSource}'`)
     const {
       dependencies,
       devDependencies,
       peerDependencies,
       optionalDependencies
-    } = JSON.parse(readFileSync(nodeModulePath.join(path, name, 'package.json'), 'utf8'))
+    } = JSON.parse(readFileSync(path, 'utf8'))
     dependencies && collectDependencyObject(dependencies, packageSource)
     devDependencies && collectDependencyObject(devDependencies, packageSource)
     peerDependencies && collectDependencyObject(peerDependencies, packageSource)
     optionalDependencies && collectDependencyObject(optionalDependencies, packageSource)
   })
+
   return { packageInfoMap, dependencyMap }
 }
 
 const checkOutdatedWithNpm = async (dependencies, pathTemp) => {
   console.log(`[checkOutdated] create and checking '${pathTemp}'`)
   await createDirectory(pathTemp)
-  writeFileSync(nodeModulePath.join(pathTemp, 'package.json'), JSON.stringify({ dependencies }))
-  const { stdout, status, signal, error } = spawnSync(
-    'npm',
-    [ 'outdated', '--registry=https://registry.npm.taobao.org', '--disturl=https://npm.taobao.org/dist' ],
-    { cwd: pathTemp, stdio: [ 'pipe', 'pipe', 'inherit' ], shell: true }
-  )
+  writeFileSync(resolve(pathTemp, 'package.json'), JSON.stringify({ dependencies }))
+  const { stdout, status, signal, error } = spawnSync('npm', [ 'outdated' ], { cwd: pathTemp, stdio: 'pipe', shell: true })
   await modify.delete(pathTemp)
   __DEV__ && console.log(`  status: ${status}, signal: ${signal}`)
   __DEV__ && console.log(stringIndentLine(stdout.toString(), '  '))
@@ -79,8 +79,8 @@ const PAD_FUNC_LIST = [
 ]
 const formatPadTable = (table) => padTable({ table, cellPad: ' | ', padFuncList: PAD_FUNC_LIST })
 
-const doCheckOutdated = async ({ pathResource, pathTemp }) => {
-  const { packageInfoMap, dependencyMap } = await collectPackageDependency(pathResource)
+const doCheckOutdated = async ({ pathInput, pathTemp = resolve(pathInput, 'check-outdated-gitignore') }) => {
+  const { packageInfoMap, dependencyMap } = await collectPackageDependency(pathInput)
   const npmOutdatedOutputString = await checkOutdatedWithNpm(dependencyMap, pathTemp)
   const outdatedCount = logCheckOutdatedResult(packageInfoMap, npmOutdatedOutputString)
   process.exit(outdatedCount)

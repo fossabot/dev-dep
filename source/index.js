@@ -1,37 +1,39 @@
-import nodeModulePath from 'path'
-import { parseOption, exitWithError } from './option'
-import { doPack } from './pack'
+import { parseOption, formatUsage } from './option'
 import { doCheckOutdated } from './checkOutdated'
+import { doPack } from './pack'
+import { name as packageName, version as packageVersion } from '../package.json'
 
 const main = async () => {
   const { getSingleOption, getSingleOptionOptional } = await parseOption()
-  const mode = getSingleOption('mode')
   try {
-    switch (mode) {
-      case 'check-outdated':
-      case 'co':
-        await doCheckOutdated({
-          pathResource: nodeModulePath.resolve(__dirname, '../resource'),
-          pathTemp: nodeModulePath.resolve(__dirname, '../check-outdated-gitignore')
-        })
-        break
-      case 'pack-only':
-      case 'pack-publish':
-        await doPack({
-          pathEntry: getSingleOption('path-entry'),
-          pathOutput: getSingleOption('path-output'),
-          outputName: getSingleOptionOptional('output-name'),
-          outputVersion: getSingleOptionOptional('output-version'),
-          outputDescription: getSingleOptionOptional('output-description'),
-          isPublish: mode === 'pack-publish'
-        })
-        break
-    }
+    if (getSingleOptionOptional('version')) return console.log(JSON.stringify({ packageName, packageVersion }, null, '  '))
+
+    const isCheckOutdated = getSingleOptionOptional('check-outdated')
+    const isPack = getSingleOptionOptional('pack')
+
+    isCheckOutdated && await doCheckOutdated({
+      pathInput: getSingleOption('path-input'),
+      pathTemp: getSingleOptionOptional('path-temp')
+    })
+
+    isPack && await doPack({
+      pathInput: getSingleOption('path-input'),
+      pathOutput: getSingleOption('path-output'),
+      outputName: getSingleOptionOptional('output-name'),
+      outputVersion: getSingleOptionOptional('output-version'),
+      outputDescription: getSingleOptionOptional('output-description'),
+      isPublish: getSingleOptionOptional('publish'),
+      isPublishDev: getSingleOptionOptional('publish-dev')
+    })
+
+    !isCheckOutdated && !isPack && console.log(formatUsage())
   } catch (error) {
-    console.warn(`[Error] in mode: ${mode}:`)
-    console.warn(error)
+    console.warn(`[Error]`, error)
     process.exit(2)
   }
 }
 
-main().catch(exitWithError)
+main().catch((error) => {
+  console.warn(formatUsage(error.stack || error.message || error.toString()))
+  process.exit(1)
+})

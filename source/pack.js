@@ -1,9 +1,11 @@
-import nodeModulePath from 'path'
+import { join as joinPath, resolve, dirname } from 'path'
 import { statSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
+
 import { stringIndentLine, binary as formatBinary } from 'dr-js/module/common/format'
 import { objectMergeDeep, objectSortKey } from 'dr-js/module/common/data/__utils__'
-import { createDirectory, modify } from 'dr-js/module/node/file'
+import { createDirectory } from 'dr-js/module/node/file/File'
+import { modify } from 'dr-js/module/node/file/Modify'
 
 const GET_INITIAL_PACKAGE_INFO = () => ({
   packageJSON: {},
@@ -14,8 +16,8 @@ const GET_INITIAL_PACKAGE_INFO = () => ({
 const loadPackage = (packagePath, packageInfo = GET_INITIAL_PACKAGE_INFO(), loadedSet = new Set()) => {
   const packageFile = packagePath.endsWith('.json')
     ? packagePath
-    : nodeModulePath.join(packagePath, 'package.json')
-  if (packagePath.endsWith('.json')) packagePath = nodeModulePath.dirname(packagePath)
+    : joinPath(packagePath, 'package.json')
+  if (packagePath.endsWith('.json')) packagePath = dirname(packagePath)
   if (loadedSet.has(packageFile)) return packageInfo
   loadedSet.add(packageFile)
 
@@ -27,7 +29,7 @@ const loadPackage = (packagePath, packageInfo = GET_INITIAL_PACKAGE_INFO(), load
   } = require(packageFile)
   const { packageJSON, exportFilePairList, installFilePairList } = packageInfo
 
-  importList && importList.forEach((importPackagePath) => loadPackage(nodeModulePath.resolve(packagePath, importPackagePath), packageInfo, loadedSet))
+  importList && importList.forEach((importPackagePath) => loadPackage(resolve(packagePath, importPackagePath), packageInfo, loadedSet))
 
   console.log(`[loadPackage] load: ${packageFile}`)
   installList && installList.forEach((filePath) => installFilePairList.push(parseResourcePath(filePath, packagePath)))
@@ -37,8 +39,8 @@ const loadPackage = (packagePath, packageInfo = GET_INITIAL_PACKAGE_INFO(), load
 }
 
 const parseResourcePath = (resourcePath, packagePath) => typeof (resourcePath) === 'object'
-  ? [ nodeModulePath.resolve(packagePath, resourcePath.from), resourcePath.to ]
-  : [ nodeModulePath.resolve(packagePath, resourcePath), resourcePath ]
+  ? [ resolve(packagePath, resourcePath.from), resourcePath.to ]
+  : [ resolve(packagePath, resourcePath), resourcePath ]
 
 const PACKAGE_KEY_SORT_REQUIRED = [
   'dependencies',
@@ -70,10 +72,10 @@ const writePackageJSON = async (packageJSON, path) => {
   console.log(`[writePackageJSON] ${path} [${formatBinary(packageBuffer.length)}B]`)
 }
 
-const doPack = async ({ pathEntry, pathOutput, outputName, outputVersion, outputDescription, isPublish }) => {
-  const pathOutputInstall = nodeModulePath.resolve(pathOutput, 'install')
+const doPack = async ({ pathInput, pathOutput, outputName, outputVersion, outputDescription, isPublish, isPublishDev }) => {
+  const pathOutputInstall = resolve(pathOutput, 'install')
 
-  const { packageJSON, exportFilePairList, installFilePairList } = loadPackage(pathEntry)
+  const { packageJSON, exportFilePairList, installFilePairList } = loadPackage(pathInput)
   if (outputName) packageJSON.name = outputName
   if (outputVersion) packageJSON.version = outputVersion
   if (outputDescription) packageJSON.description = outputDescription
@@ -81,16 +83,16 @@ const doPack = async ({ pathEntry, pathOutput, outputName, outputVersion, output
   await modify.delete(pathOutput).catch(() => {})
   await createDirectory(pathOutput)
   await createDirectory(pathOutputInstall)
-  await writePackageJSON(packageJSON, nodeModulePath.join(pathOutput, 'package.json'))
-  for (const [ source, targetRelative ] of exportFilePairList) await modify.copy(source, nodeModulePath.join(pathOutput, targetRelative))
-  for (const [ source, targetRelative ] of installFilePairList) await modify.copy(source, nodeModulePath.join(pathOutputInstall, targetRelative))
+  await writePackageJSON(packageJSON, joinPath(pathOutput, 'package.json'))
+  for (const [ source, targetRelative ] of exportFilePairList) await modify.copy(source, joinPath(pathOutput, targetRelative))
+  for (const [ source, targetRelative ] of installFilePairList) await modify.copy(source, joinPath(pathOutputInstall, targetRelative))
 
   execSync('npm pack', { cwd: pathOutput, stdio: 'inherit', shell: true })
   const outputFileName = `${packageJSON.name}-${packageJSON.version}.tgz`
-  console.log(`done pack: ${outputFileName} [${formatBinary(statSync(nodeModulePath.join(pathOutput, outputFileName)).size)}B]`)
+  console.log(`done pack: ${outputFileName} [${formatBinary(statSync(joinPath(pathOutput, outputFileName)).size)}B]`)
 
   isPublish && execSync('npm publish', { cwd: pathOutput, stdio: 'inherit', shell: true })
-  isPublish && console.log(`done publish: ${outputFileName}`)
+  isPublishDev && execSync('npm publish --tag dev', { cwd: pathOutput, stdio: 'inherit', shell: true })
 }
 
 export { doPack }

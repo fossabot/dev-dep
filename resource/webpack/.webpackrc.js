@@ -1,7 +1,6 @@
-const nodeModulePath = require('path')
-const webpack = require('webpack')
+const { resolve } = require('path')
+const { DefinePlugin, BannerPlugin, optimize: { ModuleConcatenationPlugin } } = require('webpack')
 const BabelMinifyPlugin = require('babel-minify-webpack-plugin')
-const { DefinePlugin, BannerPlugin, optimize: { ModuleConcatenationPlugin } } = webpack
 
 const NODE_ENV = process.env.NODE_ENV
 const IS_PRODUCTION = NODE_ENV === 'production'
@@ -14,7 +13,7 @@ const BABEL_OPTIONS = {
 
 module.exports = {
   output: {
-    path: nodeModulePath.join(__dirname, './library/'),
+    path: resolve(__dirname, './library/'),
     filename: '[name].js',
     library: 'PACKAGE_NAME',
     libraryTarget: 'umd'
@@ -22,7 +21,7 @@ module.exports = {
   entry: {
     'index': [ 'source/index' ]
   },
-  resolve: { alias: { source: nodeModulePath.resolve(__dirname, './source/') } },
+  resolve: { alias: { source: resolve(__dirname, './source/') } },
   target: 'node', // support node main modules like 'fs'
   module: {
     rules: [
