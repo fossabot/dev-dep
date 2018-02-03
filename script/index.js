@@ -5,10 +5,10 @@ import { execSync, spawnSync } from 'child_process'
 import { binary as formatBinary, stringIndentLine } from 'dr-js/module/common/format'
 import { getFileList } from 'dr-js/module/node/file/Directory'
 
-import { runMain } from '../source-tool/__utils__'
-import { getLogger } from '../source-tool/logger'
-import { wrapFileProcessor, fileProcessorBabel } from '../source-tool/fileProcessor'
-import { initOutput, packOutput } from '../source-tool/commonOutput'
+import { runMain } from '../source/__utils__'
+import { getLogger } from '../source/logger'
+import { wrapFileProcessor, fileProcessorBabel } from '../source/fileProcessor'
+import { initOutput, packOutput } from '../source/commonOutput'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -31,13 +31,6 @@ const processSource = async ({ packageJSON }) => {
   for (const filePath of await getFileList(fromOutput('bin'))) sizeCodeReduceBin += await processBabel(filePath)
   log(`bin size reduce: ${formatBinary(sizeCodeReduceBin)}B`)
 
-  padLog(`build tool`)
-  execSync('npm run build-tool', execOptionRoot)
-  padLog(`process tool`)
-  let sizeCodeReduceTool = 0
-  for (const filePath of await getFileList(fromOutput('tool'))) sizeCodeReduceTool += await processBabel(filePath)
-  log(`module size reduce: ${formatBinary(sizeCodeReduceTool)}B`)
-
   padLog(`build library`)
   execSync('npm run build-library', execOptionRoot)
   padLog(`process library`)
@@ -45,7 +38,7 @@ const processSource = async ({ packageJSON }) => {
   for (const filePath of await getFileList(fromOutput('library'))) sizeCodeReduceLibrary += await processBabel(filePath)
   log(`library-babel size reduce: ${formatBinary(sizeCodeReduceLibrary)}B`)
 
-  padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceTool + sizeCodeReduceLibrary)}B`)
+  padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
 
   padLog('verify output bin working')
   const outputBinTest = execSync('node bin --version', { ...execOptionOutput, stdio: 'pipe' }).toString()

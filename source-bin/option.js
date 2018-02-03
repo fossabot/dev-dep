@@ -1,9 +1,8 @@
 import { createOptionParser } from 'dr-js/module/common/module/Option/Parser'
-import { ConfigPreset } from 'dr-js/module/common/module/Option/Preset'
+import { ConfigPreset, getOptionalFormatFlag } from 'dr-js/module/common/module/Option/Preset'
 import { parseOptionMap, createOptionGetter } from 'dr-js/module/node/module/Option'
 
 const { SingleString, BooleanFlag, Config } = ConfigPreset
-const getOptionalFormatFlag = (...formatNameList) => (optionMap) => !formatNameList.some((formatName) => Boolean(optionMap[ formatName ]))
 
 const OPTION_CONFIG = {
   prefixENV: 'dev-dep',
