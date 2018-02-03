@@ -68,8 +68,8 @@ const packPackage = ({ packageJSON }) => {
       '--pack',
       '--output-version', packageJSON.version,
       ...(
-        argvList.includes('publish-dev') ? [ 'publish-dev' ]
-          : argvList.includes('publish') ? [ 'publish' ] : []
+        argvList.includes('publish-dev') ? [ '--publish-dev' ]
+          : argvList.includes('publish') ? [ '--publish' ] : []
       )
     ], execOptionRoot)
   })

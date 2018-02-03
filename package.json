@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dev-dep-tool",
-  "version": "0.0.13-dev.1",
+  "version": "0.0.13",
   "author": "dr-js",
   "license": "MIT",
   "description": "Provide common package devDependencies",
