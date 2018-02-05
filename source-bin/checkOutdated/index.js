@@ -59,7 +59,6 @@ const doCheckOutdated = async ({ pathInput, pathTemp }) => {
   } else {
     console.log(`[checkOutdated] direct checking '${pathInput}'`)
     loadPackage(pathInput, pathInput, collectDependency)
-    console.log({ packageInfoMap })
     outdatedCount = await logCheckOutdatedResult(packageInfoMap, dirname(pathInput))
   }
 

@@ -16,25 +16,25 @@ const syncEnvKey = (key, defaultValue) => {
 
 const __VERBOSE__ = syncEnvKey('__DEV_VERBOSE__', process.argv.slice(2).includes('verbose'))
 
-const loadFlag = (flagList) => {
-  const flagMap = {
-    ...loadEnvKey('__DEV_FLAG_MAP__'),
-    ...process.argv.slice(2).reduce((o, flag) => {
-      if (flagList.includes(flag)) o[ flag ] = true
-      return o
-    }, {})
-  }
-  saveEnvKey('__DEV_FLAG_MAP__', flagMap)
-  return flagMap
+const loadFlag = (validFlagList) => {
+  const rawFlagList = [
+    ...(loadEnvKey('__DEV_FLAG_LIST__') || []),
+    ...process.argv.slice(2)
+  ]
+  const flagList = validFlagList.filter((flag) => rawFlagList.includes(flag))
+  saveEnvKey('__DEV_FLAG_LIST__', flagList)
+  return flagList
 }
+const checkFlag = (flagList, checkFlagList, defaultFlag) => flagList.find((flag) => checkFlagList.includes(flag)) || defaultFlag
 
-const runMain = (main, logger) => main(logger).then(() => {
-  logger.padLog(`done`)
-}, (error) => {
-  logger.padLog(`error`)
-  console.warn(error)
-  process.exit(-1)
-})
+const runMain = (main, logger) => main(logger).then(
+  () => { logger.padLog(`done`) },
+  (error) => {
+    logger.padLog(`error`)
+    console.warn(error)
+    process.exit(-1)
+  }
+)
 
 export {
   loadEnvKey,
@@ -44,6 +44,7 @@ export {
   __VERBOSE__,
 
   loadFlag,
+  checkFlag,
 
   runMain
 }
