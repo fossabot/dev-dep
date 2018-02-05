@@ -28,7 +28,7 @@ const loadFlag = (flagList) => {
   return flagMap
 }
 
-const runMain = (main, logger) => main().then(() => {
+const runMain = (main, logger) => main(logger).then(() => {
   logger.padLog(`done`)
 }, (error) => {
   logger.padLog(`error`)

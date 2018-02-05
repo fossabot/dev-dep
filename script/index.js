@@ -4,6 +4,7 @@ import { execSync, spawnSync } from 'child_process'
 
 import { binary as formatBinary, stringIndentLine } from 'dr-js/module/common/format'
 import { getFileList } from 'dr-js/module/node/file/Directory'
+import { modify } from 'dr-js/module/node/file/Modify'
 
 import { runMain } from '../source/__utils__'
 import { getLogger } from '../source/logger'
@@ -53,12 +54,12 @@ const DEV_DEP_LIST = [
   'dev-dep-web-react',
   'dev-dep-web-react-postcss'
 ]
-const packPackage = ({ packageJSON }) => {
+const packPackage = async ({ packageJSON }) => {
   padLog('run pack-check-outdated')
   execSync(`npm run pack-check-outdated`, execOptionRoot)
 
-  padLog('run pack-clear')
-  execSync(`npm run pack-clear`, execOptionRoot)
+  padLog('clear pack')
+  await modify.delete(fromRoot('output-package-gitignore'))
 
   DEV_DEP_LIST.forEach((devDep) => {
     padLog(`pack package ${devDep}`)

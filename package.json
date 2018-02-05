@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dev-dep-tool",
-  "version": "0.0.13",
+  "version": "0.0.14-dev.0",
   "author": "dr-js",
   "license": "MIT",
   "description": "Provide common package devDependencies",
@@ -31,14 +31,13 @@
     "// dev =========================": "",
     "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source --out-dir ./output-gitignore/library --watch",
     "build-bin-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source-bin --out-dir ./output-gitignore/bin --watch",
-    "// pack ========================": "",
-    "pack-check-outdated": "node ./output-gitignore/bin -C -i ./resource",
-    "pack-clear": "dr-js -m rm -a ./output-package-gitignore",
     "// build =======================": "",
-    "build": "npm run build-clear && npm run build-library && npm run build-tool && npm run build-bin",
-    "build-clear": "dr-js -m rm -a ./output-gitignore",
     "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source --out-dir ./output-gitignore/library",
     "build-bin": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source-bin --out-dir ./output-gitignore/bin",
+    "// =============================": "",
+    "check-outdated": "node ./output-gitignore/bin -C -i ./resource",
+    "check-outdated-self": "node ./output-gitignore/bin -C -i ./package.json",
+    "check-outdated-node-module": "node ./output-gitignore/bin -C -i ./node_modules/dev-dep-babel/package.json",
     "prepack": "echo \"Error: should not prepack this package\" && exit 1"
   },
   "engines": {
@@ -46,9 +45,9 @@
     "npm": ">=5.5.0"
   },
   "dependencies": {
-    "dr-js": "^0.11.0-dev.4"
+    "dr-js": "^0.11.1-dev.0"
   },
   "devDependencies": {
-    "dev-dep-babel": "^0.0.12"
+    "dev-dep-babel": "^0.0.13"
   }
 }
