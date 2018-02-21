@@ -5,7 +5,7 @@
   ],
   "INSTALL": [ ".eslintrc.js" ],
   "dependencies": {
-    "eslint-config-standard-react": "^5.0.0",
-    "eslint-plugin-react": "^7.6.1"
+    "eslint-config-standard-react": "^6.0.0",
+    "eslint-plugin-react": "^7.7.0"
   }
 }

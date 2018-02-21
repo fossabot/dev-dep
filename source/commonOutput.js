@@ -18,10 +18,10 @@ const initOutput = async ({
   logger.padLog(`init output package.json`)
   const packageJSON = require(fromRoot('package.json'))
   for (const deleteKey of deleteKeyList) delete packageJSON[ deleteKey ]
-  logger.log(`dropped ${deleteKeyList} from package.json`)
+  logger.log(`dropped ${JSON.stringify(deleteKeyList)} from package.json`)
   writeFileSync(fromOutput('package.json'), JSON.stringify(packageJSON))
 
-  logger.padLog(`init output file from root: ${copyPathList}`)
+  logger.padLog(`init output file from root: ${JSON.stringify(copyPathList)}`)
   for (const copyPath of copyPathList) await modify.copy(fromRoot(copyPath), fromOutput(copyPath))
 
   return packageJSON

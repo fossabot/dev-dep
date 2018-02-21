@@ -55,8 +55,8 @@ const DEV_DEP_LIST = [
   'dev-dep-web-react-postcss'
 ]
 const packPackage = async ({ packageJSON }) => {
-  padLog('run pack-check-outdated')
-  execSync(`npm run pack-check-outdated`, execOptionRoot)
+  padLog('run check-outdated')
+  execSync(`npm run check-outdated`, execOptionRoot)
 
   padLog('clear pack')
   await modify.delete(fromRoot('output-package-gitignore'))
