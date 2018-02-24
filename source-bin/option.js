@@ -1,5 +1,5 @@
-import { createOptionParser } from 'dr-js/module/common/module/Option/Parser'
-import { ConfigPreset, getOptionalFormatFlag } from 'dr-js/module/common/module/Option/Preset'
+import { createOptionParser } from 'dr-js/module/common/module/Option/parser'
+import { ConfigPreset, getOptionalFormatFlag } from 'dr-js/module/common/module/Option/preset'
 import { parseOptionMap, createOptionGetter } from 'dr-js/module/node/module/Option'
 
 const { SingleString, BooleanFlag, Config } = ConfigPreset

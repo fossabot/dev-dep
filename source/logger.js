@@ -6,7 +6,7 @@ const getLogger = (title = 'dev-dep', padWidth = 160) => {
   saveEnvKey('__DEV_LOGGER_TITLE__', title)
 
   const padTitle = ` [${title}]`
-  const padLog = (...args) => console.log(`## ${args.join(' ')} `.padEnd(padWidth - padTitle.length, '-') + padTitle)
+  const padLog = (...args) => console.log(`\n## ${args.join(' ')} `.padEnd(padWidth - padTitle.length, '-') + padTitle)
   const log = (...args) => console.log(`- ${args.join(' ')}`)
   const devLog = __VERBOSE__ ? log : () => {}
   return { padLog, log, devLog }

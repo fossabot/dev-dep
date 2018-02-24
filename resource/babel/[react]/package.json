@@ -1,7 +1,7 @@
 {
   "IMPORT": [ "../", "../../react" ],
-  "INSTALL": [ ".babelrc" ],
+  "INSTALL": [ ".babelrc.js" ],
   "dependencies": {
-    "babel-preset-react": "^6.24.1"
+    "@babel/preset-react": "^7.0.0-beta.40"
   }
 }

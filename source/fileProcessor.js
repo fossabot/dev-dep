@@ -26,12 +26,13 @@ const wrapFileProcessor = ({ processor, logger }) => async (filePath) => {
 }
 
 const fileProcessorBabel = (inputString) => inputString
-  .replace(/['"]use strict['"];\s+/g, '')
-  .replace(/Object\.defineProperty\(exports, ['"]__esModule['"], {\s+value: true\s+}\);\s+/g, '')
-  .replace(/(exports\.\w+ = )+undefined;\s+/g, '')
-  .replace(/[\n\r]{2,}/g, '\n')
+  .replace(/['"]use strict['"];?\s*/g, '')
+  .replace(/Object\.defineProperty\(exports,\s*['"]__esModule['"],\s*{\s*value:\s*(true|!0)\s*}\);?\s*/g, '')
+  .replace(/(exports\.\w+\s*=\s*)+(undefined|void 0);?\s*/g, '')
+  .replace(/[\n\r]{2,}/g, '\n') // remove multi-blank lines // TODO: may also change `` strings
+  .replace(/^[\n\r]+/, '') // remove leading blank line
 const fileProcessorWebpack = (inputString) => inputString
-  .replace(/function\(\){return (\w+)}/g, '()=>$1')
+  .replace(/function\(\){return\s*([\w$]+)}/g, '()=>$1')
 
 export {
   wrapFileProcessor,

@@ -1,8 +1,7 @@
 const { resolve } = require('path')
-const { HashedModuleIdsPlugin, DefinePlugin, BannerPlugin, optimize: { CommonsChunkPlugin, ModuleConcatenationPlugin } } = require('webpack')
+const { HashedModuleIdsPlugin, DefinePlugin, BannerPlugin, optimize: { CommonsChunkPlugin } } = require('webpack')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
-const BabelMinifyPlugin = require('babel-minify-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const NODE_ENV = process.env.NODE_ENV
@@ -45,8 +44,6 @@ module.exports = {
     new CommonsChunkPlugin({ name: 'runtime' }),
     new ManifestPlugin({ fileName: 'manifest.json' }),
     ...(IS_PRODUCTION ? [
-      new ModuleConcatenationPlugin(),
-      new BabelMinifyPlugin(),
       new BannerPlugin({ banner: '/* eslint-disable */', raw: true, test: /\.js$/, entryOnly: false }),
       new BannerPlugin({ banner: '/* stylelint-disable */', raw: true, test: /\.css$/, entryOnly: false }),
       new CompressionPlugin({ test: /\.(js|css)$/, minRatio: 1 })

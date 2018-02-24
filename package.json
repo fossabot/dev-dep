@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dev-dep-tool",
-  "version": "0.0.14-dev.2",
+  "version": "0.0.14-dev.3",
   "author": "dr-js",
   "license": "MIT",
   "description": "Provide common package devDependencies",
@@ -29,8 +29,8 @@
     "script-pack-package-publish": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish",
     "script-pack-package-publish-dev": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish-dev",
     "// dev =========================": "",
-    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source --out-dir ./output-gitignore/library --watch",
-    "build-bin-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source-bin --out-dir ./output-gitignore/bin --watch",
+    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=dev babel ./source --out-dir ./output-gitignore/library --watch",
+    "build-bin-dev": "cross-env NODE_ENV=development BABEL_ENV=dev babel ./source-bin --out-dir ./output-gitignore/bin --watch",
     "// build =======================": "",
     "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source --out-dir ./output-gitignore/library",
     "build-bin": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source-bin --out-dir ./output-gitignore/bin",
@@ -45,9 +45,9 @@
     "npm": ">=5.5.0"
   },
   "dependencies": {
-    "dr-js": "^0.11.1-dev.1"
+    "dr-js": "^0.12.0-dev.0"
   },
   "devDependencies": {
-    "dev-dep-babel": "^0.0.13"
+    "dev-dep-babel": "^0.0.14-dev.3"
   }
 }

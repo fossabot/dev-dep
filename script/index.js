@@ -18,32 +18,30 @@ const fromOutput = (...args) => resolve(PATH_OUTPUT, ...args)
 const execOptionRoot = { cwd: fromRoot(), stdio: 'inherit', shell: true }
 const execOptionOutput = { cwd: fromOutput(), stdio: 'inherit', shell: true }
 
-const argvList = process.argv.slice(2)
-const logger = getLogger([ 'dev-dep-tool', ...argvList ].join('|'))
-const { padLog, log } = logger
+const ARGV_LIST = process.argv.slice(2)
 
-const processSource = async ({ packageJSON }) => {
+const processSource = async ({ packageJSON, logger }) => {
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
 
-  padLog(`build bin`)
+  logger.padLog(`build bin`)
   execSync('npm run build-bin', execOptionRoot)
-  padLog(`process bin`)
+  logger.padLog(`process bin`)
   let sizeCodeReduceBin = 0
   for (const filePath of await getFileList(fromOutput('bin'))) sizeCodeReduceBin += await processBabel(filePath)
-  log(`bin size reduce: ${formatBinary(sizeCodeReduceBin)}B`)
+  logger.log(`bin size reduce: ${formatBinary(sizeCodeReduceBin)}B`)
 
-  padLog(`build library`)
+  logger.padLog(`build library`)
   execSync('npm run build-library', execOptionRoot)
-  padLog(`process library`)
+  logger.padLog(`process library`)
   let sizeCodeReduceLibrary = 0
   for (const filePath of await getFileList(fromOutput('library'))) sizeCodeReduceLibrary += await processBabel(filePath)
-  log(`library-babel size reduce: ${formatBinary(sizeCodeReduceLibrary)}B`)
+  logger.log(`library-babel size reduce: ${formatBinary(sizeCodeReduceLibrary)}B`)
 
-  padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
+  logger.padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
 
-  padLog('verify output bin working')
+  logger.padLog('verify output bin working')
   const outputBinTest = execSync('node bin --version', { ...execOptionOutput, stdio: 'pipe' }).toString()
-  log(`bin test output: \n${stringIndentLine(outputBinTest, '  ')}`)
+  logger.log(`bin test output: \n${stringIndentLine(outputBinTest, '  ')}`)
   for (const testString of [ packageJSON.name, packageJSON.version ]) ok(outputBinTest.includes(testString), `should output contain: ${testString}`)
 }
 
@@ -54,39 +52,44 @@ const DEV_DEP_LIST = [
   'dev-dep-web-react',
   'dev-dep-web-react-postcss'
 ]
-const packPackage = async ({ packageJSON }) => {
-  padLog('run check-outdated')
-  execSync(`npm run check-outdated`, execOptionRoot)
+const packPackage = async ({ packageJSON, logger }) => {
+  if (ARGV_LIST.includes('unsafe')) {
+    logger.padLog(`[unsafe] skipped check-outdated`)
+  } else {
+    logger.padLog('run check-outdated')
+    execSync(`npm run check-outdated`, execOptionRoot)
+  }
 
-  padLog('clear pack')
+  logger.padLog('clear pack')
   await modify.delete(fromRoot('output-package-gitignore'))
 
   DEV_DEP_LIST.forEach((devDep) => {
-    padLog(`pack package ${devDep}`)
+    logger.padLog(`pack package ${devDep}`)
     spawnSync('node', [
       './output-gitignore/bin',
       '--config', `./config/${devDep}.json`,
       '--pack',
       '--output-version', packageJSON.version,
       ...(
-        argvList.includes('publish-dev') ? [ '--publish-dev' ]
-          : argvList.includes('publish') ? [ '--publish' ] : []
+        ARGV_LIST.includes('publish-dev') ? [ '--publish-dev' ]
+          : ARGV_LIST.includes('publish') ? [ '--publish' ] : []
       )
     ], execOptionRoot)
   })
 }
 
-runMain(async () => {
+runMain(async (logger) => {
   const packageJSON = await initOutput({ fromRoot, fromOutput, logger })
 
-  if (!argvList.includes('pack')) return
-  await processSource({ packageJSON })
+  if (!ARGV_LIST.includes('pack')) return
+  await processSource({ packageJSON, logger })
   await packOutput({ fromRoot, fromOutput, logger })
 
-  if (argvList.includes('pack-package')) {
-    await packPackage({ packageJSON })
+  if (ARGV_LIST.includes('pack-package')) {
+    await packPackage({ packageJSON, logger })
     return
   }
-  argvList.includes('publish') && execSync('npm publish', execOptionOutput)
-  argvList.includes('publish-dev') && execSync('npm publish --tag dev', execOptionOutput)
-}, logger)
+
+  ARGV_LIST.includes('publish') && execSync('npm publish', execOptionOutput)
+  ARGV_LIST.includes('publish-dev') && execSync('npm publish --tag dev', execOptionOutput)
+}, getLogger(ARGV_LIST.join('+')))

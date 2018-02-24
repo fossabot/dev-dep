@@ -8,8 +8,7 @@
     "perf-webpack-profile": "cross-env NODE_ENV=production webpack --config .webpackrc.js --profile"
   },
   "dependencies": {
-    "webpack": "^3.11.0",
-    "babel-loader": "^7.1.2",
-    "babel-minify-webpack-plugin": "^0.3.0"
+    "webpack": "^4.0.1",
+    "babel-loader": "^8.0.0-beta.2"
   }
 }
