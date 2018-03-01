@@ -1006,9 +1006,9 @@ doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-dr-js@^0.12.0-dev.0:
-  version "0.12.0-dev.0"
-  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.12.0-dev.0.tgz#de213c4a999ff871b040b896ec5757e026299add"
+dr-js@^0.12.0-dev.1:
+  version "0.12.0-dev.1"
+  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.12.0-dev.1.tgz#e2c4bcbc1e5a6cfb6805935a147c32340fa00579"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"

@@ -39,6 +39,9 @@ const processSource = async ({ packageJSON, logger }) => {
 
   logger.padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
 
+  logger.padLog('run script-generate-export')
+  execSync(`npm run script-generate-export`, execOptionRoot)
+
   logger.padLog('verify output bin working')
   const outputBinTest = execSync('node bin --version', { ...execOptionOutput, stdio: 'pipe' }).toString()
   logger.log(`bin test output: \n${stringIndentLine(outputBinTest, '  ')}`)
@@ -90,6 +93,7 @@ runMain(async (logger) => {
     return
   }
 
+  // TODO: should allow publish both?
   ARGV_LIST.includes('publish') && execSync('npm publish', execOptionOutput)
   ARGV_LIST.includes('publish-dev') && execSync('npm publish --tag dev', execOptionOutput)
 }, getLogger(ARGV_LIST.join('+')))

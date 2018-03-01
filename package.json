@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dev-dep-tool",
-  "version": "0.0.14-dev.3",
+  "version": "0.0.14-dev.4",
   "author": "dr-js",
   "license": "MIT",
   "description": "Provide common package devDependencies",
@@ -21,13 +21,14 @@
   "bin": "bin/index.js",
   "scripts": {
     "// script ======================": "",
-    "script-base": "cross-env BABEL_ENV=library babel-node ./script",
-    "script-pack": "cross-env BABEL_ENV=library babel-node ./script pack",
-    "script-publish": "cross-env BABEL_ENV=library babel-node ./script pack publish",
-    "script-publish-dev": "cross-env BABEL_ENV=library babel-node ./script pack publish-dev",
-    "script-pack-package": "cross-env BABEL_ENV=library babel-node ./script pack pack-package",
-    "script-pack-package-publish": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish",
-    "script-pack-package-publish-dev": "cross-env BABEL_ENV=library babel-node ./script pack pack-package publish-dev",
+    "script-base": "cross-env BABEL_ENV=dev babel-node ./script",
+    "script-pack": "cross-env BABEL_ENV=dev babel-node ./script pack",
+    "script-publish": "cross-env BABEL_ENV=dev babel-node ./script pack publish",
+    "script-publish-dev": "cross-env BABEL_ENV=dev babel-node ./script pack publish-dev",
+    "script-pack-package": "cross-env BABEL_ENV=dev babel-node ./script pack pack-package",
+    "script-pack-package-publish": "cross-env BABEL_ENV=dev babel-node ./script pack pack-package publish",
+    "script-pack-package-publish-dev": "cross-env BABEL_ENV=dev babel-node ./script pack pack-package publish-dev",
+    "script-generate-export": "cross-env BABEL_ENV=dev babel-node ./script/generateExport",
     "// dev =========================": "",
     "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=dev babel ./source --out-dir ./output-gitignore/library --watch",
     "build-bin-dev": "cross-env NODE_ENV=development BABEL_ENV=dev babel ./source-bin --out-dir ./output-gitignore/bin --watch",
@@ -45,7 +46,7 @@
     "npm": ">=5.5.0"
   },
   "dependencies": {
-    "dr-js": "^0.12.0-dev.0"
+    "dr-js": "^0.12.0-dev.1"
   },
   "devDependencies": {
     "dev-dep-babel": "^0.0.14-dev.3"
