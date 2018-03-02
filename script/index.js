@@ -6,10 +6,10 @@ import { binary as formatBinary, stringIndentLine } from 'dr-js/module/common/fo
 import { getFileList } from 'dr-js/module/node/file/Directory'
 import { modify } from 'dr-js/module/node/file/Modify'
 
-import { runMain } from '../source/__utils__'
+import { checkFlag, runMain } from '../source/__utils__'
 import { getLogger } from '../source/logger'
 import { wrapFileProcessor, fileProcessorBabel } from '../source/fileProcessor'
-import { initOutput, packOutput } from '../source/commonOutput'
+import { initOutput, packOutput, publishOutput } from '../source/commonOutput'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -58,6 +58,7 @@ const DEV_DEP_LIST = [
 const packPackage = async ({ packageJSON, logger }) => {
   if (ARGV_LIST.includes('unsafe')) {
     logger.padLog(`[unsafe] skipped check-outdated`)
+    if (checkFlag(ARGV_LIST, [ 'publish', 'publish-dev' ])) throw new Error(`[unsafe] should not be used with publish`)
   } else {
     logger.padLog('run check-outdated')
     execSync(`npm run check-outdated`, execOptionRoot)
@@ -89,11 +90,11 @@ runMain(async (logger) => {
   await packOutput({ fromRoot, fromOutput, logger })
 
   if (ARGV_LIST.includes('pack-package')) {
-    await packPackage({ packageJSON, logger })
-    return
+    logger.padLog(`pack-package: ${packageJSON.version}`)
+    const doPackPackage = () => packPackage({ packageJSON, logger })
+    await publishOutput({ flagList: ARGV_LIST, packageJSON, onPublish: doPackPackage, onPublishDev: doPackPackage, logger })
+    return // will not pack both
   }
 
-  // TODO: should allow publish both?
-  ARGV_LIST.includes('publish') && execSync('npm publish', execOptionOutput)
-  ARGV_LIST.includes('publish-dev') && execSync('npm publish --tag dev', execOptionOutput)
+  await publishOutput({ flagList: ARGV_LIST, packageJSON, fromOutput, logger })
 }, getLogger(ARGV_LIST.join('+')))

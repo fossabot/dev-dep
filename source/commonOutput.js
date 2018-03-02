@@ -32,8 +32,10 @@ const packOutput = async ({
   fromOutput,
   logger
 }) => {
+  const execOptionOutput = { cwd: fromOutput(), stdio: 'inherit', shell: true }
+
   logger.padLog('run pack output')
-  execSync('npm pack', { cwd: fromOutput(), stdio: 'inherit', shell: true })
+  execSync('npm pack', execOptionOutput)
 
   logger.padLog('move to root path')
   const packageJSON = require(fromOutput('package.json'))
@@ -42,4 +44,25 @@ const packOutput = async ({
   logger.log(`pack size: ${formatBinary(statSync(fromRoot(packName)).size)}B`)
 }
 
-export { initOutput, packOutput }
+const publishOutput = async ({
+  flagList,
+  packageJSON,
+  fromOutput, // only for default publish option.cwd
+  onPublish = () => execSync('npm publish --tag latest', { cwd: fromOutput(), stdio: 'inherit', shell: true }),
+  onPublishDev = () => execSync('npm publish --tag dev', { cwd: fromOutput(), stdio: 'inherit', shell: true }),
+  logger
+}) => {
+  if (flagList.includes('publish-dev')) {
+    logger.padLog(`publish-dev: ${packageJSON.version}`)
+    if (!REGEXP_PUBLISH_VERSION_DEV.test(packageJSON.version)) throw new Error(`[publish-dev] invalid version: ${packageJSON.version}`)
+    await onPublishDev()
+  } else if (flagList.includes('publish')) {
+    logger.padLog(`publish: ${packageJSON.version}`)
+    if (!REGEXP_PUBLISH_VERSION.test(packageJSON.version)) throw new Error(`[publish] invalid version: ${packageJSON.version}`)
+    await onPublish()
+  }
+}
+const REGEXP_PUBLISH_VERSION = /^\d+\.\d+\.\d+$/ // 0.0.0
+const REGEXP_PUBLISH_VERSION_DEV = /^\d+\.\d+\.\d+-dev\.\d+$/ // 0.0.0-dev.0
+
+export { initOutput, packOutput, publishOutput }

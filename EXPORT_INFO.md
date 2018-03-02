@@ -4,7 +4,7 @@
 + 📄 [source/\_\_utils\_\_.js](source/__utils__.js)
   - `loadEnvKey`, `saveEnvKey`, `syncEnvKey`, `__VERBOSE__`, `loadFlag`, `checkFlag`, `runMain`
 + 📄 [source/commonOutput.js](source/commonOutput.js)
-  - `initOutput`, `packOutput`
+  - `initOutput`, `packOutput`, `publishOutput`
 + 📄 [source/exec.js](source/exec.js)
   - `tryExec`, `getGitBranch`, `getGitCommitHash`
 + 📄 [source/fileProcessor.js](source/fileProcessor.js)
