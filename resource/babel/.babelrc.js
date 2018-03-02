@@ -3,19 +3,19 @@ const getReplaceDEV = (value) => ({ replacements: [ { identifierName: '__DEV__',
 module.exports = {
   env: {
     dev: { // __DEV__ = true, use require()
-      presets: [ [ 'env', { targets: { node: 8 } } ] ],
+      presets: [ [ '@babel/env', { targets: { node: 8 } } ] ],
       plugins: [
-        [ 'proposal-class-properties' ],
-        [ 'proposal-object-rest-spread', { useBuiltIns: true } ],
+        [ '@babel/proposal-class-properties' ],
+        [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
         [ 'module-resolver', { root: [ './' ] } ],
         [ 'minify-replace', getReplaceDEV(true) ]
       ]
     },
     library: { // __DEV__ = false, use require()
-      presets: [ [ 'env', { targets: { node: 8 } } ] ],
+      presets: [ [ '@babel/env', { targets: { node: 8 } } ] ],
       plugins: [
-        [ 'proposal-class-properties' ],
-        [ 'proposal-object-rest-spread', { useBuiltIns: true } ],
+        [ '@babel/proposal-class-properties' ],
+        [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
         [ 'module-resolver', { root: [ './' ] } ],
         [ 'minify-replace', getReplaceDEV(false) ],
         [ 'minify-guarded-expressions' ],
@@ -24,10 +24,10 @@ module.exports = {
       comments: false
     },
     module: { // __DEV__ = false, use import from, remove unused code & comment
-      presets: [ [ 'env', { targets: { node: 8 }, modules: false } ] ],
+      presets: [ [ '@babel/env', { targets: { node: 8 }, modules: false } ] ],
       plugins: [
-        [ 'proposal-class-properties' ],
-        [ 'proposal-object-rest-spread', { useBuiltIns: true } ],
+        [ '@babel/proposal-class-properties' ],
+        [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
         [ 'module-resolver', { root: [ './' ] } ],
         [ 'minify-replace', getReplaceDEV(false) ],
         [ 'minify-guarded-expressions' ],

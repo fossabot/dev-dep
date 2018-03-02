@@ -2,7 +2,7 @@
 
 #### Export Path
 + 📄 [source/\_\_utils\_\_.js](source/__utils__.js)
-  - `loadEnvKey`, `saveEnvKey`, `syncEnvKey`, `__VERBOSE__`, `loadFlag`, `checkFlag`, `runMain`
+  - `loadEnvKey`, `saveEnvKey`, `syncEnvKey`, `__VERBOSE__`, `checkFlag`, `argvFlag`, `runMain`
 + 📄 [source/commonOutput.js](source/commonOutput.js)
   - `initOutput`, `packOutput`, `publishOutput`
 + 📄 [source/exec.js](source/exec.js)

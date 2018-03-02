@@ -6,10 +6,12 @@ import { binary as formatBinary, stringIndentLine } from 'dr-js/module/common/fo
 import { getFileList } from 'dr-js/module/node/file/Directory'
 import { modify } from 'dr-js/module/node/file/Modify'
 
-import { checkFlag, runMain } from '../source/__utils__'
+import { argvFlag, runMain } from '../source/__utils__'
 import { getLogger } from '../source/logger'
 import { wrapFileProcessor, fileProcessorBabel } from '../source/fileProcessor'
 import { initOutput, packOutput, publishOutput } from '../source/commonOutput'
+
+const EMPTY_FUNC = () => {}
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -17,8 +19,6 @@ const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 const fromOutput = (...args) => resolve(PATH_OUTPUT, ...args)
 const execOptionRoot = { cwd: fromRoot(), stdio: 'inherit', shell: true }
 const execOptionOutput = { cwd: fromOutput(), stdio: 'inherit', shell: true }
-
-const ARGV_LIST = process.argv.slice(2)
 
 const processSource = async ({ packageJSON, logger }) => {
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
@@ -53,12 +53,13 @@ const DEV_DEP_LIST = [
   'dev-dep-babel-react',
   'dev-dep-web',
   'dev-dep-web-react',
-  'dev-dep-web-react-postcss'
+  'dev-dep-web-react-postcss',
+  'dev-dep-web-react-styled-components'
 ]
 const packPackage = async ({ packageJSON, logger }) => {
-  if (ARGV_LIST.includes('unsafe')) {
+  if (argvFlag('unsafe')) {
     logger.padLog(`[unsafe] skipped check-outdated`)
-    if (checkFlag(ARGV_LIST, [ 'publish', 'publish-dev' ])) throw new Error(`[unsafe] should not be used with publish`)
+    if (argvFlag('publish', 'publish-dev')) throw new Error(`[unsafe] should not be used with publish`)
   } else {
     logger.padLog('run check-outdated')
     execSync(`npm run check-outdated`, execOptionRoot)
@@ -75,8 +76,8 @@ const packPackage = async ({ packageJSON, logger }) => {
       '--pack',
       '--output-version', packageJSON.version,
       ...(
-        ARGV_LIST.includes('publish-dev') ? [ '--publish-dev' ]
-          : ARGV_LIST.includes('publish') ? [ '--publish' ] : []
+        argvFlag('publish-dev') ? [ '--publish-dev' ]
+          : argvFlag('publish') ? [ '--publish' ] : []
       )
     ], execOptionRoot)
   })
@@ -85,16 +86,17 @@ const packPackage = async ({ packageJSON, logger }) => {
 runMain(async (logger) => {
   const packageJSON = await initOutput({ fromRoot, fromOutput, logger })
 
-  if (!ARGV_LIST.includes('pack')) return
+  if (!argvFlag('pack')) return
   await processSource({ packageJSON, logger })
   await packOutput({ fromRoot, fromOutput, logger })
 
-  if (ARGV_LIST.includes('pack-package')) {
+  if (argvFlag('pack-package')) {
+    // check
+    await publishOutput({ flagList: process.argv, packageJSON, onPublish: EMPTY_FUNC, onPublishDev: EMPTY_FUNC, logger })
     logger.padLog(`pack-package: ${packageJSON.version}`)
-    const doPackPackage = () => packPackage({ packageJSON, logger })
-    await publishOutput({ flagList: ARGV_LIST, packageJSON, onPublish: doPackPackage, onPublishDev: doPackPackage, logger })
+    await packPackage({ packageJSON, logger })
     return // will not pack both
   }
 
-  await publishOutput({ flagList: ARGV_LIST, packageJSON, fromOutput, logger })
-}, getLogger(ARGV_LIST.join('+')))
+  await publishOutput({ flagList: process.argv, packageJSON, fromOutput, logger })
+}, getLogger(process.argv.slice(2).join('+')))

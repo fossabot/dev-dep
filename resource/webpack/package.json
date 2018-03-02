@@ -1,11 +1,9 @@
 {
   "IMPORT": [ "../babel/" ],
-  "INSTALL": [ ".webpackrc.js" ],
+  "INSTALL": [ "webpack.js" ],
   "scripts": {
-    "build-library": "cross-env NODE_ENV=production webpack --config .webpackrc.js",
-    "build-library-dev": "cross-env NODE_ENV=development webpack --watch --config .webpackrc.js",
-    "perf-webpack-stats": "cross-env NODE_ENV=production webpack --config .webpackrc.js --json > stats-gitignore.json",
-    "perf-webpack-profile": "cross-env NODE_ENV=production webpack --config .webpackrc.js --profile"
+    "build-library": "cross-env BABEL_ENV=test babel-node ./webpack.js production",
+    "build-library-dev": "cross-env BABEL_ENV=test babel-node ./webpack.js development watch"
   },
   "dependencies": {
     "webpack": "^4.0.1",

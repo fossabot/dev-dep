@@ -1,0 +1,6 @@
+{
+  "pathInput": "../resource/__entry__/dev-dep-web-react-styled-components.json",
+  "pathOutput": "../output-package-gitignore/dev-dep-web-react-styled-components",
+  "outputName": "dev-dep-web-react-styled-components",
+  "outputDescription": "Webpack + ESLint + Babel + Mocha + React + StyledComponents"
+}

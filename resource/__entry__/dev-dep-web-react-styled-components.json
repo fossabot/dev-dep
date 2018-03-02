@@ -1,0 +1,9 @@
+{
+  "IMPORT": [
+    "../__base__",
+    "../mocha",
+    "../webpack/[react]/[styled-components]",
+    "../eslint/[react]",
+    "../babel/[react]"
+  ]
+}
