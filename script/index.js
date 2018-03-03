@@ -39,7 +39,7 @@ const processSource = async ({ packageJSON, logger }) => {
 
   logger.padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
 
-  logger.padLog('run script-generate-export')
+  logger.padLog('generate export info')
   execSync(`npm run script-generate-export`, execOptionRoot)
 
   logger.padLog('verify output bin working')

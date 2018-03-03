@@ -3,15 +3,16 @@ import { readFileSync } from 'fs'
 import { parse as parseAST } from 'babylon'
 import { FILE_TYPE, getPathType } from 'dr-js/module/node/file/File'
 
-const getExportListFromParsedAST = (fileString, sourceFilename) => {
+const getExportListFromParsedAST = (fileString, sourceFilename, babylonPluginList) => {
   const resultAST = parseAST(fileString, {
     sourceFilename,
     sourceType: 'module',
-    plugins: [
+    plugins: babylonPluginList || [
       'objectRestSpread',
       'classProperties',
       'exportDefaultFrom',
-      'exportNamespaceFrom'
+      'exportNamespaceFrom',
+      'jsx'
     ]
   })
   const exportNodeList = resultAST.program.body.filter(({ type }) => type === 'ExportNamedDeclaration')
@@ -20,7 +21,7 @@ const getExportListFromParsedAST = (fileString, sourceFilename) => {
     : specifiers.map(({ exported: { name } }) => name)))
 }
 
-const createExportParser = ({ logger }) => {
+const createExportParser = ({ babylonPluginList, logger }) => {
   const sourceRouteMap = {
     // 'source/route': {
     //   routeList: [ 'source' ],
@@ -46,7 +47,7 @@ const createExportParser = ({ logger }) => {
       logger.devLog(`[directory] ${path}`)
     } else if (FILE_TYPE.File === fileType && name.endsWith('.js') && !name.endsWith('.test.js')) {
       const fileString = readFileSync(path, { encoding: 'utf8' })
-      const exportList = getExportListFromParsedAST(fileString, path)
+      const exportList = getExportListFromParsedAST(fileString, path, babylonPluginList)
       getRoute(routeList).fileList.push({ name: name.slice(0, -3), exportList }) // remove `.js` from name
 
       logger.devLog(`[file] ${path}`)
