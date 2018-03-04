@@ -857,6 +857,10 @@ commander@^2.8.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
 
+commander@~2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -964,9 +968,9 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
-dev-dep-babel@^0.0.14-dev.6:
-  version "0.0.14-dev.6"
-  resolved "https://registry.yarnpkg.com/dev-dep-babel/-/dev-dep-babel-0.0.14-dev.6.tgz#9a7f91f67c71e1c681e9d96ac0fe61dd0a2c948b"
+dev-dep-babel@^0.0.14-dev.8:
+  version "0.0.14-dev.8"
+  resolved "https://registry.yarnpkg.com/dev-dep-babel/-/dev-dep-babel-0.0.14-dev.8.tgz#d03dceb19f80954e15ee2bab5c1a0db0a7d6a537"
   dependencies:
     "@babel/cli" "^7.0.0-beta.40"
     "@babel/core" "^7.0.0-beta.40"
@@ -988,6 +992,7 @@ dev-dep-babel@^0.0.14-dev.6:
     eslint-plugin-promise "^3.6.0"
     eslint-plugin-standard "^3.0.1"
     mocha "^5.0.1"
+    uglify-es "3.3.9"
 
 diff@3.3.1:
   version "3.3.1"
@@ -1006,9 +1011,9 @@ doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-dr-js@^0.12.0-dev.2:
-  version "0.12.0-dev.2"
-  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.12.0-dev.2.tgz#ba77d1cacd4406e0e8519f1e059c52c86f56bfde"
+dr-js@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/dr-js/-/dr-js-0.12.0.tgz#11e074e274027a3aa4036ab2b23f18b5aa012546"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"
@@ -2369,6 +2374,10 @@ source-map@^0.5.0, source-map@^0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
 
+source-map@~0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
 spdx-correct@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-1.0.2.tgz#4b3073d933ff51f3912f03ac5519498a4150db40"
@@ -2541,6 +2550,13 @@ type-check@~0.3.2:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+uglify-es@3.3.9:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"
+  dependencies:
+    commander "~2.13.0"
+    source-map "~0.6.1"
 
 uid-number@^0.0.6:
   version "0.0.6"

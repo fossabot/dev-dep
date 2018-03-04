@@ -2,7 +2,7 @@ import { ok } from 'assert'
 import { resolve } from 'path'
 import { execSync, spawnSync } from 'child_process'
 
-import { binary as formatBinary, stringIndentLine } from 'dr-js/module/common/format'
+import { binary as formatBinary } from 'dr-js/module/common/format'
 import { getFileList } from 'dr-js/module/node/file/Directory'
 import { modify } from 'dr-js/module/node/file/Modify'
 
@@ -20,18 +20,28 @@ const fromOutput = (...args) => resolve(PATH_OUTPUT, ...args)
 const execOptionRoot = { cwd: fromRoot(), stdio: 'inherit', shell: true }
 const execOptionOutput = { cwd: fromOutput(), stdio: 'inherit', shell: true }
 
+const buildOutput = async ({ logger: { padLog } }) => {
+  padLog('generate export info')
+  execSync(`npm run script-generate-export`, execOptionRoot)
+
+  padLog(`build bin`)
+  execSync('npm run build-bin', execOptionRoot)
+
+  padLog(`build library`)
+  execSync('npm run build-library', execOptionRoot)
+}
+
 const processSource = async ({ packageJSON, logger }) => {
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
 
-  logger.padLog(`build bin`)
-  execSync('npm run build-bin', execOptionRoot)
+  logger.padLog(`process minify-library`)
+  execSync('npm run minify-library', execOptionRoot)
+
   logger.padLog(`process bin`)
   let sizeCodeReduceBin = 0
   for (const filePath of await getFileList(fromOutput('bin'))) sizeCodeReduceBin += await processBabel(filePath)
   logger.log(`bin size reduce: ${formatBinary(sizeCodeReduceBin)}B`)
 
-  logger.padLog(`build library`)
-  execSync('npm run build-library', execOptionRoot)
   logger.padLog(`process library`)
   let sizeCodeReduceLibrary = 0
   for (const filePath of await getFileList(fromOutput('library'))) sizeCodeReduceLibrary += await processBabel(filePath)
@@ -39,12 +49,9 @@ const processSource = async ({ packageJSON, logger }) => {
 
   logger.padLog(`total size reduce: ${formatBinary(sizeCodeReduceBin + sizeCodeReduceLibrary)}B`)
 
-  logger.padLog('generate export info')
-  execSync(`npm run script-generate-export`, execOptionRoot)
-
   logger.padLog('verify output bin working')
   const outputBinTest = execSync('node bin --version', { ...execOptionOutput, stdio: 'pipe' }).toString()
-  logger.log(`bin test output: \n${stringIndentLine(outputBinTest, '  ')}`)
+  logger.log(`bin test output: ${outputBinTest}`)
   for (const testString of [ packageJSON.name, packageJSON.version ]) ok(outputBinTest.includes(testString), `should output contain: ${testString}`)
 }
 
@@ -87,11 +94,12 @@ runMain(async (logger) => {
   const packageJSON = await initOutput({ fromRoot, fromOutput, logger })
 
   if (!argvFlag('pack')) return
+  await buildOutput({ logger })
   await processSource({ packageJSON, logger })
   await packOutput({ fromRoot, fromOutput, logger })
 
   if (argvFlag('pack-package')) {
-    // check
+    // just check
     await publishOutput({ flagList: process.argv, packageJSON, onPublish: EMPTY_FUNC, onPublishDev: EMPTY_FUNC, logger })
     logger.padLog(`pack-package: ${packageJSON.version}`)
     await packPackage({ packageJSON, logger })

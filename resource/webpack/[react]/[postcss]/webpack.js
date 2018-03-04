@@ -11,44 +11,45 @@ const PATH_ROOT = resolvePath(__dirname, '..')
 const fromRoot = (...args) => resolvePath(PATH_ROOT, ...args)
 
 runMain(async (logger) => {
-  const MODE = argvFlag('development', 'production') || 'production'
-  const IS_PRODUCTION = MODE === 'production'
-  const OPTIONS = {
-    BABEL_LOADER: {
-      babelrc: false,
-      cacheDirectory: IS_PRODUCTION,
-      presets: [ [ '@babel/env', { targets: { node: 8 }, modules: false } ], [ '@babel/react' ] ],
-      plugins: [ [ '@babel/proposal-class-properties' ], [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ] ]
-    },
-    CSS_LOADER: { importLoaders: 1, localIdentName: IS_PRODUCTION ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' },
-    POSTCSS_LOADER: { plugins: () => [ require('postcss-cssnext') ] }
+  const mode = argvFlag('development', 'production') || 'production'
+  const profileOutput = argvFlag('profile') ? fromRoot('profile-stat-gitignore.json') : null
+  const isWatch = argvFlag('watch')
+  const isProduction = mode === 'production'
+
+  const babelOption = {
+    babelrc: false,
+    cacheDirectory: isProduction,
+    presets: [ [ '@babel/env', { targets: { node: 8 }, modules: false } ], [ '@babel/react' ] ],
+    plugins: [ [ '@babel/proposal-class-properties' ], [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ] ]
   }
-  const EXTRACT_TEXT_OPTION = {
+
+  const extractTextOption = {
     use: [
-      { loader: 'css-loader', options: OPTIONS.CSS_LOADER },
-      { loader: 'postcss-loader', options: OPTIONS.POSTCSS_LOADER }
+      { loader: 'css-loader', options: { importLoaders: 1, localIdentName: isProduction ? '[hash:base64:12]' : '[name]_[local]_[hash:base64:5]' } },
+      { loader: 'postcss-loader', options: { plugins: () => [ require('postcss-cssnext') ] } }
     ]
   }
 
   const config = {
-    mode: MODE,
-    output: { path: fromRoot('output-gitignore/'), filename: IS_PRODUCTION ? '[name].[chunkhash:8].js' : '[name].js', library: 'PACKAGE_NAME', libraryTarget: 'umd' },
+    mode,
+    bail: isProduction,
+    output: { path: fromRoot('output-gitignore/'), filename: isProduction ? '[name].[chunkhash:8].js' : '[name].js', library: 'PACKAGE_NAME', libraryTarget: 'umd' },
     entry: { 'index': 'source/index' },
     resolve: { alias: { source: fromRoot('source') } },
     module: {
       rules: [
-        { test: /\.js$/, exclude: /node_modules/, use: [ { loader: 'babel-loader', options: OPTIONS.BABEL_LOADER } ] },
-        { test: /\.pcss$/, use: ExtractTextPlugin.extract(EXTRACT_TEXT_OPTION) }
+        { test: /\.js$/, exclude: /node_modules/, use: [ { loader: 'babel-loader', options: babelOption } ] },
+        { test: /\.pcss$/, use: ExtractTextPlugin.extract(extractTextOption) }
       ]
     },
     plugins: [
-      new ExtractTextPlugin(IS_PRODUCTION ? '[name].[contenthash:8].css' : '[name].css'),
-      new DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(MODE), '__DEV__': !IS_PRODUCTION }),
+      new ExtractTextPlugin(isProduction ? '[name].[contenthash:8].css' : '[name].css'),
+      new DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(mode), '__DEV__': !isProduction }),
       new HashedModuleIdsPlugin(),
       new ManifestPlugin({ fileName: 'manifest.json' })
     ]
   }
 
-  logger.padLog(`compile with webpack mode: ${MODE}`)
-  await compileWithWebpack({ config, isWatch: !IS_PRODUCTION, logger })
+  logger.padLog(`compile with webpack mode: ${mode}, isWatch: ${Boolean(isWatch)}`)
+  await compileWithWebpack({ config, isWatch, profileOutput, logger })
 }, getLogger(`webpack`))
