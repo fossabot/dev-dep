@@ -6,10 +6,11 @@ import { binary as formatBinary } from 'dr-js/module/common/format'
 import { getFileList } from 'dr-js/module/node/file/Directory'
 import { modify } from 'dr-js/module/node/file/Modify'
 
-import { argvFlag, runMain } from '../source/__utils__'
-import { getLogger } from '../source/logger'
-import { wrapFileProcessor, fileProcessorBabel } from '../source/fileProcessor'
-import { initOutput, packOutput, publishOutput } from '../source/commonOutput'
+import { argvFlag, runMain } from 'source/__utils__'
+import { getLogger } from 'source/logger'
+import { wrapFileProcessor, fileProcessorBabel } from 'source/fileProcessor'
+import { initOutput, packOutput, publishOutput } from 'source/commonOutput'
+import { LIBRARY_OPTION, minifyFileListWithUglifyEs } from 'source/uglify'
 
 const EMPTY_FUNC = () => {}
 
@@ -35,7 +36,15 @@ const processSource = async ({ packageJSON, logger }) => {
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
 
   logger.padLog(`process minify-library`)
-  execSync('npm run minify-library', execOptionRoot)
+  await minifyFileListWithUglifyEs({
+    fileList: [
+      ...await getFileList(fromOutput('bin')),
+      ...await getFileList(fromOutput('library'))
+    ].filter((path) => path.endsWith('.js') && !path.endsWith('.test.js')),
+    option: LIBRARY_OPTION,
+    rootPath: PATH_ROOT,
+    logger
+  })
 
   logger.padLog(`process bin`)
   let sizeCodeReduceBin = 0

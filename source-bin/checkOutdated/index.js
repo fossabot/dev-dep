@@ -27,9 +27,7 @@ const withPathTemp = async ({ pathTemp, packageInfoMap, dependencyMap }) => {
   let result, resultError
   try {
     result = await logCheckOutdatedResult(packageInfoMap, pathTemp)
-  } catch (error) {
-    resultError = error
-  }
+  } catch (error) { resultError = error }
 
   await modify.delete(pathTemp)
 

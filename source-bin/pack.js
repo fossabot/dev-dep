@@ -59,7 +59,8 @@ const PACKAGE_KEY_ORDER = [
   'os', 'cpu', 'engines', 'engineStrict', 'preferGlobal',
   'main', 'bin', 'man', 'files', 'directories',
   'scripts', 'config', 'publishConfig',
-  ...PACKAGE_KEY_SORT_REQUIRED
+  ...PACKAGE_KEY_SORT_REQUIRED,
+  'sideEffects' // webpack4
 ]
 
 const writePackageJSON = async (packageJSON, path) => {

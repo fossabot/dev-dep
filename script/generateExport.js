@@ -1,12 +1,13 @@
-import { resolve, relative, sep } from 'path'
+import { resolve } from 'path'
 import { writeFileSync } from 'fs'
+
+import { getDirectoryContent, walkDirectoryContent } from 'dr-js/module/node/file/Directory'
 
 import { runMain } from 'source/__utils__'
 import { getLogger } from 'source/logger'
 import { createExportParser } from 'source/ExportIndex/parseExport'
-import { EXPORT_LIST_KEY, generateExportInfo } from 'source/ExportIndex/generateInfo'
-
-import { getDirectoryContent, walkDirectoryContent } from 'dr-js/module/node/file/Directory'
+import { generateExportInfo } from 'source/ExportIndex/generateInfo'
+import { renderMarkdownExportPath } from 'source/ExportIndex/renderMarkdown'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
@@ -16,15 +17,6 @@ const collectSourceRouteMap = async ({ logger }) => {
   await walkDirectoryContent(await getDirectoryContent(fromRoot('source')), (path, name) => parseExport(resolve(path, name)))
   return getSourceRouteMap()
 }
-
-const renderExportPath = (exportInfoMap) => Object.entries(exportInfoMap).reduce((textList, [ path, value ]) => {
-  path = relative(PATH_ROOT, path).split(sep).join('/')
-  value[ EXPORT_LIST_KEY ] && textList.push(
-    `+ 📄 [${path.replace(/_/g, '\\_')}.js](${path}.js)`,
-    `  - ${value[ EXPORT_LIST_KEY ].map((text) => `\`${text}\``).join(', ')}`
-  )
-  return textList
-}, [])
 
 runMain(async (logger) => {
   logger.log(`collect sourceRouteMap`)
@@ -38,6 +30,6 @@ runMain(async (logger) => {
     '# Export Info',
     '',
     '#### Export Path',
-    ...renderExportPath(exportInfoMap)
+    ...renderMarkdownExportPath({ exportInfoMap, rootPath: PATH_ROOT })
   ].join('\n'))
 }, getLogger('generate-export'))
