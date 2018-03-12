@@ -4,21 +4,26 @@ import UglifyEs from 'uglify-es'
 import { clock } from 'dr-js/module/common/time'
 import { binary, time, padTable } from 'dr-js/module/common/format'
 
-const ecma = 8 // specify one of: 5, 6, 7 or 8
-const toplevel = true // enable top level variable and function name mangling and to drop unused variables and functions
-const MODULE_OPTION = {
-  ecma,
-  toplevel,
-  parse: { ecma },
-  compress: { ecma, toplevel, join_vars: false, sequences: false },
-  mangle: false,
-  output: { ecma, beautify: true, indent_level: 2, width: 240 },
-  sourceMap: false
-}
-const LIBRARY_OPTION = {
-  ...MODULE_OPTION,
-  mangle: { toplevel },
-  output: { ecma, beautify: false, semicolons: false }
+const getUglifyESOption = ({
+  isDevelopment = false,
+  isModule = false // module should be much more readable
+}) => {
+  const globalDefineMap = {
+    'process.env.NODE_ENV': isDevelopment ? 'development' : 'production',
+    '__DEV__': Boolean(isDevelopment)
+  }
+
+  const ecma = 8 // specify one of: 5, 6, 7 or 8
+  const toplevel = true // enable top level variable and function name mangling and to drop unused variables and functions
+  return {
+    ecma,
+    toplevel,
+    parse: { ecma },
+    compress: { ecma, toplevel, join_vars: false, sequences: false, global_defs: globalDefineMap },
+    mangle: isModule ? false : { toplevel },
+    output: isModule ? { ecma, beautify: true, indent_level: 2, width: 240 } : { ecma, beautify: false, semicolons: false },
+    sourceMap: false
+  }
 }
 
 const minifyWithUglifyEs = ({ filePath, option, logger }) => {
@@ -43,7 +48,7 @@ const minifyWithUglifyEs = ({ filePath, option, logger }) => {
   }
 }
 
-const minifyFileListWithUglifyEs = async ({ fileList, option = LIBRARY_OPTION, rootPath = '', logger }) => {
+const minifyFileListWithUglifyEs = async ({ fileList, option, rootPath = '', logger }) => {
   logger.padLog(`minify ${fileList.length} file with uglify-es`)
 
   const resultTable = []
@@ -77,8 +82,7 @@ const minifyFileListWithUglifyEs = async ({ fileList, option = LIBRARY_OPTION, r
 }
 
 export {
-  MODULE_OPTION,
-  LIBRARY_OPTION,
+  getUglifyESOption,
   minifyWithUglifyEs,
   minifyFileListWithUglifyEs
 }

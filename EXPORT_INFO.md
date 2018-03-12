@@ -12,7 +12,7 @@
 + 📄 [source/logger.js](source/logger.js)
   - `getLogger`
 + 📄 [source/uglify.js](source/uglify.js)
-  - `MODULE_OPTION`, `LIBRARY_OPTION`, `minifyWithUglifyEs`, `minifyFileListWithUglifyEs`
+  - `getUglifyESOption`, `minifyWithUglifyEs`, `minifyFileListWithUglifyEs`
 + 📄 [source/webpack.js](source/webpack.js)
   - `compileWithWebpack`
 + 📄 [source/ExportIndex/generateInfo.js](source/ExportIndex/generateInfo.js)

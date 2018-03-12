@@ -10,7 +10,7 @@ import { argvFlag, runMain } from 'source/__utils__'
 import { getLogger } from 'source/logger'
 import { wrapFileProcessor, fileProcessorBabel } from 'source/fileProcessor'
 import { initOutput, packOutput, publishOutput } from 'source/commonOutput'
-import { LIBRARY_OPTION, minifyFileListWithUglifyEs } from 'source/uglify'
+import { getUglifyESOption, minifyFileListWithUglifyEs } from 'source/uglify'
 
 const EMPTY_FUNC = () => {}
 
@@ -41,7 +41,7 @@ const processSource = async ({ packageJSON, logger }) => {
       ...await getFileList(fromOutput('bin')),
       ...await getFileList(fromOutput('library'))
     ].filter((path) => path.endsWith('.js') && !path.endsWith('.test.js')),
-    option: LIBRARY_OPTION,
+    option: getUglifyESOption({ isDevelopment: false, isModule: false }),
     rootPath: PATH_ROOT,
     logger
   })
