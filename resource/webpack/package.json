@@ -2,8 +2,8 @@
   "IMPORT": [ "../babel/" ],
   "INSTALL": [ "webpack.js" ],
   "scripts": {
-    "build-library": "cross-env BABEL_ENV=test babel-node ./webpack.js production",
-    "build-library-dev": "cross-env BABEL_ENV=test babel-node ./webpack.js development watch"
+    "build-library": "babel-node ./webpack.js production",
+    "build-library-dev": "babel-node ./webpack.js development watch"
   },
   "dependencies": {
     "webpack": "^4.1.1",
