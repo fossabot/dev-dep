@@ -1,22 +1,17 @@
+const BABEL_ENV = process.env.BABEL_ENV || ''
+const isDev = BABEL_ENV.includes('dev')
+const isRawModule = BABEL_ENV.includes('module')
+
 module.exports = {
-  env: {
-    library: {
-      presets: [ [ '@babel/env', { targets: '>= 5%' } ], [ '@babel/react' ] ],
-      plugins: [
-        [ '@babel/proposal-class-properties' ],
-        [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
-        [ 'module-resolver', { root: [ './' ] } ]
-      ],
-      comments: false
-    },
-    module: {
-      presets: [ [ '@babel/env', { targets: { node: 8 }, modules: false } ], [ '@babel/react' ] ],
-      plugins: [
-        [ '@babel/proposal-class-properties' ],
-        [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
-        [ 'module-resolver', { root: [ './' ] } ]
-      ],
-      comments: false
-    }
-  }
+  presets: [
+    [ '@babel/env', { targets: isDev ? '>= 5%' : { node: 8 }, modules: isRawModule ? false : 'commonjs' } ],
+    [ '@babel/react' ]
+  ],
+  plugins: [
+    [ '@babel/proposal-class-properties' ],
+    [ '@babel/proposal-object-rest-spread', { useBuiltIns: true } ],
+    [ 'module-resolver', { root: [ './' ], alias: { 'dr-js/module/(.+)': 'dr-js/library/' } } ],
+    [ 'minify-replace', { replacements: [ { identifierName: '__DEV__', replacement: { type: 'booleanLiteral', value: isDev } } ] } ]
+  ],
+  comments: false
 }
