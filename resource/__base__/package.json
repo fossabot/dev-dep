@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "cross-env": "^5.1.4",
-    "uglify-es": "3.3.9"
+    "uglify-es": "^3.3.10"
   },
   "sideEffects": false
 }

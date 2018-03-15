@@ -13,13 +13,20 @@ const getUglifyESOption = ({
     '__DEV__': Boolean(isDevelopment)
   }
 
-  const ecma = 8 // specify one of: 5, 6, 7 or 8
+  const ecma = 8 // specify one of: 5, 6, 7 or 8; use ES8/ES2017 for native async
   const toplevel = true // enable top level variable and function name mangling and to drop unused variables and functions
   return {
     ecma,
     toplevel,
     parse: { ecma },
-    compress: { ecma, toplevel, join_vars: false, sequences: false, global_defs: globalDefineMap },
+    compress: {
+      ecma,
+      toplevel,
+      join_vars: false,
+      sequences: false,
+      global_defs: globalDefineMap,
+      inline: false // TODO: scope bug, check https://github.com/mishoo/UglifyJS2/issues/2842
+    },
     mangle: isModule ? false : { toplevel },
     output: isModule ? { ecma, beautify: true, indent_level: 2, width: 240 } : { ecma, beautify: false, semicolons: false },
     sourceMap: false
