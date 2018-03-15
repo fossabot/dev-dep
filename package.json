@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dev-dep-tool",
-  "version": "0.1.0-dev.0",
+  "version": "0.1.0-dev.1",
   "author": "dr-js",
   "license": "MIT",
   "description": "Provide common package devDependencies",
@@ -44,7 +44,7 @@
     "dr-js": "^0.12.1-dev.2"
   },
   "devDependencies": {
-    "dev-dep-babel": "^0.0.14"
+    "dev-dep-babel": "^0.1.0-dev.1"
   },
   "sideEffects": false
 }
