@@ -4,6 +4,7 @@
 [![i:yarn]][l:yarn]
 [![i:code-style]][l:code-style]
 [![i:es-2017]][l:es-2017]
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdr-js%2Fdev-dep.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdr-js%2Fdev-dep?ref=badge_shield)
 
 [![i:web]][l:web]
 [![i:web-react]][l:web-react]
@@ -32,3 +33,7 @@ Provide common package devDependencies
 [l:babel]: https://yarn.pm/dev-dep-babel
 [i:babel-react]: https://img.shields.io/badge/dev--dep-babel--react-blue.svg
 [l:babel-react]: https://yarn.pm/dev-dep-babel-react
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdr-js%2Fdev-dep.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdr-js%2Fdev-dep?ref=badge_large)
